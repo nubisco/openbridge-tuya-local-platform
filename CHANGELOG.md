@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.1.0...v1.1.1) (2026-04-16)
+
+
+### Bug Fixes
+
+* **ci:** disable git hooks during semantic-release commit ([836e3c5](https://github.com/nubisco/openbridge-tuya-local-platform/commit/836e3c5f42a9f1fd57994a88855472abe8ff5370))
+
 # [1.1.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.0.1...v1.1.0) (2026-04-16)
 
 ### Features

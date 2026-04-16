@@ -1,6 +1,6 @@
 {
   "name": "openbridge-tuya-local-platform",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "OpenBridge plugin to control Tuya devices locally over LAN — supports both native (plugins[]) and Homebridge-compat (platforms[]) loading modes",
   "repository": {
     "type": "git",
