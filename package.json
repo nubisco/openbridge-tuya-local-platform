@@ -36,6 +36,7 @@
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build",
     "test": "vitest run --passWithNoTests",
+    "test:coverage": "vitest run --coverage --passWithNoTests",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
     "types:check": "tsc --noEmit",
