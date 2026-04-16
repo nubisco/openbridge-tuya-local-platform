@@ -1,3 +1,13 @@
+# 1.0.0 (2026-04-16)
+
+### Bug Fixes
+
+- add test:coverage script and regenerate lockfile for CI ([210d688](https://github.com/nubisco/openbridge-tuya-local-platform/commit/210d6886eede3708fc768c41676c368f37f45845))
+
+### Features
+
+- initial release of openbridge-tuya-local-platform ([62ccd83](https://github.com/nubisco/openbridge-tuya-local-platform/commit/62ccd8306235e3afecaf609108d6301232f86e71))
+
 # [1.3.0](https://github.com/nubisco/homebridge-tuya-local-platform/compare/v1.2.5...v1.3.0) (2026-04-03)
 
 ### Features
