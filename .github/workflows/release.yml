@@ -32,6 +32,9 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      - name: Disable git hooks in CI
+        run: git config core.hooksPath /dev/null
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
