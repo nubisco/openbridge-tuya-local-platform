@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.0.0...v1.0.1) (2026-04-16)
+
+### Bug Fixes
+
+- add @vitest/coverage-v8 for CI coverage job ([a443e6a](https://github.com/nubisco/openbridge-tuya-local-platform/commit/a443e6a5ed6b03506b9a0109c0d2d2a6c1a9e841))
+
 # 1.0.0 (2026-04-16)
 
 ### Bug Fixes
