@@ -1,3 +1,9 @@
+# [1.1.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.0.1...v1.1.0) (2026-04-16)
+
+### Features
+
+- add VitePress documentation site and deploy workflow ([cc38384](https://github.com/nubisco/openbridge-tuya-local-platform/commit/cc38384adf4d90f0b149fe1d26e2566e97bcc999))
+
 ## [1.0.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.0.0...v1.0.1) (2026-04-16)
 
 ### Bug Fixes
