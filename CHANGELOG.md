@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.2.0...v1.2.1) (2026-04-17)
+
+
+### Bug Fixes
+
+* skip simple-git-hooks in CI to prevent npm publish failure ([132cde2](https://github.com/nubisco/openbridge-tuya-local-platform/commit/132cde2e5d5ae7a242156e4f7877e80bd5535c16))
+
 # [1.2.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.1.1...v1.2.0) (2026-04-17)
 
 ### Features
