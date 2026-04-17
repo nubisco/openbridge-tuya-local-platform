@@ -1,10 +1,9 @@
 # [1.2.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.1.1...v1.2.0) (2026-04-17)
 
-
 ### Features
 
-* rename package to @nubisco/openbridge-tuya-local-platform ([232ed79](https://github.com/nubisco/openbridge-tuya-local-platform/commit/232ed792937cc50f60c9188c7e77419b32592710))
-* replace homebridge dependency with local openbridge type declarations ([e292fe3](https://github.com/nubisco/openbridge-tuya-local-platform/commit/e292fe3ffa17d71e1e317286c18b95bb5febe4d7))
+- rename package to @nubisco/openbridge-tuya-local-platform ([232ed79](https://github.com/nubisco/openbridge-tuya-local-platform/commit/232ed792937cc50f60c9188c7e77419b32592710))
+- replace homebridge dependency with local openbridge type declarations ([e292fe3](https://github.com/nubisco/openbridge-tuya-local-platform/commit/e292fe3ffa17d71e1e317286c18b95bb5febe4d7))
 
 ## [1.1.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.1.0...v1.1.1) (2026-04-16)
 
