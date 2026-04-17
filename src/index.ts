@@ -156,6 +156,10 @@ function loadHap(log: PluginLogger): any {
     path.resolve(__dirname, '../../../node_modules/hap-nodejs'),
     path.resolve(__dirname, '../../../../node_modules/hap-nodejs'),
     path.resolve(process.cwd(), 'node_modules/hap-nodejs'),
+    // When loaded as a marketplace plugin, hap-nodejs lives in the daemon's node_modules
+    path.resolve(process.cwd(), 'apps/daemon/node_modules/hap-nodejs'),
+    // Docker volume layout: /opt/openbridge/current/apps/daemon/node_modules
+    '/opt/openbridge/current/apps/daemon/node_modules/hap-nodejs',
   ]
   for (const candidate of candidates) {
     try {
@@ -490,7 +494,11 @@ const nativePlugin = definePlugin({
     const hapPort = (bridgeCfg.hapPort as number | undefined) ?? 51827
 
     const storagePath = path.resolve(os.homedir(), '.openbridge', 'hap-storage')
-    hap.HAPStorage.setCustomStoragePath(storagePath)
+    try {
+      hap.HAPStorage.setCustomStoragePath(storagePath)
+    } catch {
+      // Storage path already set by the host (OpenBridge daemon) — safe to ignore
+    }
 
     const bridge = new hap.Bridge(bridgeName, hap.uuid.generate(bridgeName))
     bridge
