@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.2.1...v1.2.2) (2026-04-17)
+
+
+### Bug Fixes
+
+* add daemon node_modules paths for hap-nodejs resolution ([9a7de30](https://github.com/nubisco/openbridge-tuya-local-platform/commit/9a7de309b4420d9f16e53e2edc3963824d6608d8))
+
 ## [1.2.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.2.0...v1.2.1) (2026-04-17)
 
 
