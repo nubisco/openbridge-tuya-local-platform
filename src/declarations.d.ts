@@ -7,7 +7,7 @@ declare module 'yaml'
 declare module 'openbridge' {
   import { Accessory, Service as HAPService } from 'hap-nodejs'
 
-  export interface PlatformAccessory extends Accessory {
+  export type PlatformAccessory = Accessory & {
     context: any
     getServiceByUUIDAndSubType(uuid: { UUID: string } | string, subtype: string): HAPService | undefined
     configureController(controller: any): void

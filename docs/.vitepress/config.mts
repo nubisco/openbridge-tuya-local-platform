@@ -42,7 +42,7 @@ export default defineConfig({
       {
         text: 'Links',
         items: [
-          { text: 'npm', link: 'https://www.npmjs.com/package/openbridge-tuya-local-platform' },
+          { text: 'npm', link: 'https://www.npmjs.com/package/@nubisco/openbridge-tuya-local-platform' },
           { text: 'GitHub', link: 'https://github.com/nubisco/openbridge-tuya-local-platform' },
         ],
       },

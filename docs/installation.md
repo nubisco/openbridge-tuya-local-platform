@@ -4,7 +4,7 @@
 
 1. Open the OpenBridge UI.
 2. Go to **Plugins** > **Marketplace**.
-3. Search for `openbridge-tuya-local-platform`.
+3. Search for `@nubisco/openbridge-tuya-local-platform`.
 4. Click **Install**.
 5. Restart OpenBridge.
 
@@ -14,7 +14,7 @@ Install the plugin into your OpenBridge plugins directory:
 
 ```bash
 cd ~/.openbridge/plugins/openbridge
-npm install openbridge-tuya-local-platform
+npm install @nubisco/openbridge-tuya-local-platform
 ```
 
 Restart OpenBridge after installation.
@@ -27,12 +27,12 @@ You can also check the daemon logs for:
 
 ```
 [INFO] Loaded 1 native plugin(s)
-[INFO] [openbridge-tuya-local-platform] Configuration valid
+[INFO] [@nubisco/openbridge-tuya-local-platform] Configuration valid
 ```
 
 ## Migrating from Openbridge Tuya Local Platform
 
-If you previously used `@nubisco/openbridge-tuya-local-platform` with Openbridge:
+If you previously used `@nubisco/@nubisco/openbridge-tuya-local-platform` with Openbridge:
 
 1. Install this plugin in OpenBridge.
 2. Copy your device configurations (IDs, keys, types) to the OpenBridge config.

@@ -33,7 +33,7 @@ import {
 
 import type { ClassDefMap, TuyaDeviceConfig, TuyaPlatformConfig } from './types'
 
-const PLUGIN_NAME = 'openbridge-tuya-local-platform'
+const PLUGIN_NAME = '@nubisco/openbridge-tuya-local-platform'
 const PLATFORM_NAME = 'TuyaLocalPlatform'
 
 let PLUGIN_VERSION = '1.0.0'
@@ -450,7 +450,7 @@ function tuyaTypeToWidgetType(type: string): string {
 // Example config.json entry:
 //
 //   {
-//     "name": "openbridge-tuya-local-platform",
+//     "name": "@nubisco/openbridge-tuya-local-platform",
 //     "config": {
 //       "devices": [ { "id": "...", "key": "...", "type": "outlet" } ],
 //       "bridge": { "pincode": "031-45-154", "hapPort": 51827 }

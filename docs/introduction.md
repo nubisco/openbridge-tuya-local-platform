@@ -2,7 +2,7 @@
 
 Control Tuya-based smart devices locally over LAN through OpenBridge and Apple HomeKit.
 
-`openbridge-tuya-local-platform` communicates directly with Tuya devices on your local network using their Device ID and Local Key -- no cloud dependency required. It runs as a native OpenBridge plugin with full integration into the OpenBridge devices view, telemetry, and controls.
+`@nubisco/openbridge-tuya-local-platform` communicates directly with Tuya devices on your local network using their Device ID and Local Key -- no cloud dependency required. It runs as a native OpenBridge plugin with full integration into the OpenBridge devices view, telemetry, and controls.
 
 ## Features
 
@@ -15,9 +15,9 @@ Control Tuya-based smart devices locally over LAN through OpenBridge and Apple H
 - **Safety controls** -- confirmation dialogs for safety-critical devices (circuit breakers)
 - **Multi-protocol** -- supports Tuya protocol versions 3.1, 3.3, and 3.4
 
-## What's Different from Openbridge Tuya Local Platform?
+## What's Different from Homebridge Tuya Local Platform?
 
-This plugin is forked from [`@nubisco/openbridge-tuya-local-platform`](https://github.com/nubisco/openbridge-tuya-local-platform) with the following improvements:
+This plugin is forked from [`@nubisco/homebridge-tuya-local-platform`](https://github.com/nubisco/homebridge-tuya-local-platform) with the following improvements:
 
 - **All 23 accessory types report telemetry** to the OpenBridge devices view (power state, temperature, humidity, energy data)
 - **All controllable accessories register controls** for the OpenBridge UI (on/off, target temperature, target humidity)

@@ -1,5 +1,5 @@
 {
-  "name": "openbridge-tuya-local-platform",
+  "name": "@nubisco/openbridge-tuya-local-platform",
   "version": "1.1.1",
   "description": "OpenBridge plugin to control Tuya devices locally over LAN — supports both native (plugins[]) and Openbridge-compat (platforms[]) loading modes",
   "repository": {
@@ -8,6 +8,9 @@
   },
   "author": "José Silva <jose@nubisco.io>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "openbridge-plugin",
     "tuya",
@@ -101,7 +104,6 @@
     "@vitest/coverage-v8": "^4.1.4",
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
-    "openbridge": "^1.11.2",
     "lint-staged": "^16.3.2",
     "prettier": "^3.8.1",
     "semantic-release": "^25.0.3",

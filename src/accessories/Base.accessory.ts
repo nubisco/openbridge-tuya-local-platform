@@ -69,7 +69,7 @@ class BaseAccessory {
   _removeCharacteristic(service: HAPService, characteristicType: WithUUID<new () => HAPCharacteristic>): void {
     if (!service || !characteristicType || !(characteristicType as any).UUID) return
 
-    service.characteristics.some((characteristic) => {
+    service.characteristics.some((characteristic: any) => {
       if (!characteristic || characteristic.UUID !== (characteristicType as any).UUID) return false
       service.removeCharacteristic(characteristic)
       return true
