@@ -131,7 +131,7 @@ const NativePluginConfigSchema = z
 
 // ---- Logger helpers ----
 
-// Creates a callable logger compatible with Homebridge's Logger interface from a PluginLogger.
+// Creates a callable logger compatible with Openbridge's Logger interface from a PluginLogger.
 function wrapLogger(log: PluginLogger): any {
   const fn = (message: string, ...args: unknown[]) => log.info(message, ...args)
   fn.info = (message: string, ...args: unknown[]) => log.info(message, ...args)
@@ -168,10 +168,10 @@ function loadHap(log: PluginLogger): any {
   throw new Error('hap-nodejs not found')
 }
 
-// ---- Minimal HomebridgeAPI shim for native mode ----
+// ---- Minimal OpenbridgeAPI shim for native mode ----
 // Provides just the HAP surface that TuyaLocalPlatform (and its accessories) need.
 
-function createHomebridgeShim(hapNodeJs: any, bridge: any, log: PluginLogger): any {
+function createOpenbridgeShim(hapNodeJs: any, bridge: any, log: PluginLogger): any {
   const { EventEmitter } = require('events')
 
   const HapAccessoryBase: any = hapNodeJs.Accessory
@@ -184,7 +184,7 @@ function createHomebridgeShim(hapNodeJs: any, bridge: any, log: PluginLogger): a
       if (category !== undefined) this.category = category
     }
 
-    // Match Homebridge behavior: when a service of the same UUID already exists,
+    // Match Openbridge behavior: when a service of the same UUID already exists,
     // use displayName as a subtype so hap-nodejs does not throw on duplicates.
     addService(serviceType: any, ...args: any[]): any {
       if (typeof serviceType === 'function' && args.length >= 1 && args[1] === undefined) {
@@ -498,7 +498,7 @@ const nativePlugin = definePlugin({
       .setCharacteristic(hap.Characteristic.Manufacturer, 'Nubisco')
       .setCharacteristic(hap.Characteristic.Model, 'OpenBridge Tuya Local')
 
-    const shim = createHomebridgeShim(hap, bridge, ctx.log)
+    const shim = createOpenbridgeShim(hap, bridge, ctx.log)
 
     // Set the module-level HAP globals used by TuyaLocalPlatform and accessory classes.
     Characteristic = hap.Characteristic

@@ -1,14 +1,14 @@
 # Contributing
 
-Thanks for contributing to `@nubisco/homebridge-tuya-local-platform`.
+Thanks for contributing to `@nubisco/openbridge-tuya-local-platform`.
 
 For full contributor documentation, see `docs/contributing.md`.
 
 ## Local Setup
 
 ```bash
-git clone https://github.com/nubisco/homebridge-tuya-local-platform.git
-cd homebridge-tuya-local-platform
+git clone https://github.com/nubisco/openbridge-tuya-local-platform.git
+cd openbridge-tuya-local-platform
 npm install
 ```
 
@@ -25,12 +25,12 @@ npm run docs:build
 Notes:
 
 - Minimum supported Node.js version is `20`
-- Homebridge compatibility is `>=1.6.0`
+- Openbridge compatibility is `>=1.6.0`
 
 Compatibility policy:
 
-- `peerDependencies` declare the minimum supported Homebridge version for users (`>=1.6.0`)
-- `devDependencies` track the latest stable Homebridge 1.x for local development and CI
+- `peerDependencies` declare the minimum supported Openbridge version for users (`>=1.6.0`)
+- `devDependencies` track the latest stable Openbridge 1.x for local development and CI
 - Keep both in sync with real compatibility: widen support only when verified by tests and manual validation
 
 ## Branch and PR Expectations

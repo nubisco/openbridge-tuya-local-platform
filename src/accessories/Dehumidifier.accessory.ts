@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 interface DefaultDpsMap {
   [name: string]: number
@@ -193,7 +193,7 @@ class DehumidifierAccessory extends BaseAccessory {
     }
   }
 
-  getActive(callback: HomebridgeCallback): void {
+  getActive(callback: OpenbridgeCallback): void {
     this.getState(this.getDp('Active'), (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getActive(dp))
@@ -205,7 +205,7 @@ class DehumidifierAccessory extends BaseAccessory {
     return dp ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE
   }
 
-  setActive(value: DPSValue, callback: HomebridgeCallback): void {
+  setActive(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
 
     switch (value) {
@@ -218,7 +218,7 @@ class DehumidifierAccessory extends BaseAccessory {
     callback()
   }
 
-  getTankState(callback: HomebridgeCallback): void {
+  getTankState(callback: OpenbridgeCallback): void {
     this.getState(this.getDp('TankState'), (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getTankState(dp))
@@ -229,7 +229,7 @@ class DehumidifierAccessory extends BaseAccessory {
     return dp ? 100 : 50
   }
 
-  getLockTargetState(callback: HomebridgeCallback): void {
+  getLockTargetState(callback: OpenbridgeCallback): void {
     this.getState(this.getDp('ChildLock'), (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getLockTargetState(dp))
@@ -241,7 +241,7 @@ class DehumidifierAccessory extends BaseAccessory {
     return dp ? Characteristic.LockTargetState.SECURED : Characteristic.LockTargetState.UNSECURED
   }
 
-  setLockTargetState(value: DPSValue, callback: HomebridgeCallback): void {
+  setLockTargetState(value: DPSValue, callback: OpenbridgeCallback): void {
     if (this.device.context.noLock) return callback()
 
     const { Characteristic } = this.hap
@@ -256,7 +256,7 @@ class DehumidifierAccessory extends BaseAccessory {
     callback()
   }
 
-  getRotationSpeed(callback: HomebridgeCallback): void {
+  getRotationSpeed(callback: OpenbridgeCallback): void {
     this.getState(this.getDp('FanSpeed'), (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getRotationSpeed(dp))
@@ -267,13 +267,13 @@ class DehumidifierAccessory extends BaseAccessory {
     return (dp as number) > 1 ? (dp as number) - 1 : (dp as number)
   }
 
-  setRotationSpeed(value: number, callback: HomebridgeCallback): void {
+  setRotationSpeed(value: number, callback: OpenbridgeCallback): void {
     if (this.device.context.noSpeed) return callback()
     if (value > 1) value++
     return this.setState(this.getDp('FanSpeed'), value.toString(), callback)
   }
 
-  getCurrentHumidity(callback: HomebridgeCallback): void {
+  getCurrentHumidity(callback: OpenbridgeCallback): void {
     this.getState(this.getDp('CurrentHumidity'), (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getCurrentHumidity(dp))
@@ -284,7 +284,7 @@ class DehumidifierAccessory extends BaseAccessory {
     return dp
   }
 
-  getCurrentTemperature(callback: HomebridgeCallback): void {
+  getCurrentTemperature(callback: OpenbridgeCallback): void {
     this.getState(this.getDp('CurrentTemperature'), (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getCurrentTemperature(dp))
@@ -295,7 +295,7 @@ class DehumidifierAccessory extends BaseAccessory {
     return dp
   }
 
-  getTargetHumidity(callback: HomebridgeCallback): void {
+  getTargetHumidity(callback: OpenbridgeCallback): void {
     this.getState([this.getDp('Active'), this.getDp('Humidity')], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getTargetHumidity(dps))
@@ -307,7 +307,7 @@ class DehumidifierAccessory extends BaseAccessory {
     return dps[this.getDp('Humidity')] as number
   }
 
-  setTargetHumidity(value: number, callback: HomebridgeCallback): void {
+  setTargetHumidity(value: number, callback: OpenbridgeCallback): void {
     const origValue = value
     value = Math.max(value, this.device.context.minHumidity || 40)
     value = Math.min(value, this.device.context.maxHumidity || 80)

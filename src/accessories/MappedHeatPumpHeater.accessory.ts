@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback, RoomToWaterMapEntry } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback, RoomToWaterMapEntry } from '../types'
 
 /**
  * Mapped Heat Pump Heater Accessory
@@ -278,7 +278,7 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     }
   }
 
-  getActive(callback: HomebridgeCallback): void {
+  getActive(callback: OpenbridgeCallback): void {
     this.getState(this.dpActive, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getActive(dp))
@@ -290,7 +290,7 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     return dp ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE
   }
 
-  setActive(value: DPSValue, callback: HomebridgeCallback): void {
+  setActive(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
 
     switch (value) {
@@ -303,7 +303,7 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     callback()
   }
 
-  getCurrentHeaterCoolerState(callback: HomebridgeCallback): void {
+  getCurrentHeaterCoolerState(callback: OpenbridgeCallback): void {
     this.getState([this.dpActive], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getCurrentHeaterCoolerState(dps))
@@ -317,7 +317,7 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
       : Characteristic.CurrentHeaterCoolerState.INACTIVE
   }
 
-  getTargetHeaterCoolerState(callback: HomebridgeCallback): void {
+  getTargetHeaterCoolerState(callback: OpenbridgeCallback): void {
     callback(null, this._getTargetHeaterCoolerState())
   }
 
@@ -326,15 +326,15 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     return Characteristic.TargetHeaterCoolerState.HEAT
   }
 
-  setTargetHeaterCoolerState(value: DPSValue, callback: HomebridgeCallback): void {
+  setTargetHeaterCoolerState(value: DPSValue, callback: OpenbridgeCallback): void {
     this.setState(this.dpActive, true, callback)
   }
 
-  getVirtualRoomTarget(callback: HomebridgeCallback): void {
+  getVirtualRoomTarget(callback: OpenbridgeCallback): void {
     callback(null, this.virtualRoomTarget)
   }
 
-  setVirtualRoomTarget(value: number, callback: HomebridgeCallback): void {
+  setVirtualRoomTarget(value: number, callback: OpenbridgeCallback): void {
     const clampedRoom = Math.max(this.roomTargetMin, Math.min(this.roomTargetMax, value))
     const waterTarget = this._mapRoomToWater(clampedRoom)
     const clampedWater = Math.max(this.waterTargetMin, Math.min(this.waterTargetMax, waterTarget))

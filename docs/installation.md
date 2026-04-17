@@ -30,9 +30,9 @@ You can also check the daemon logs for:
 [INFO] [openbridge-tuya-local-platform] Configuration valid
 ```
 
-## Migrating from Homebridge Tuya Local Platform
+## Migrating from Openbridge Tuya Local Platform
 
-If you previously used `@nubisco/homebridge-tuya-local-platform` with Homebridge:
+If you previously used `@nubisco/openbridge-tuya-local-platform` with Openbridge:
 
 1. Install this plugin in OpenBridge.
 2. Copy your device configurations (IDs, keys, types) to the OpenBridge config.

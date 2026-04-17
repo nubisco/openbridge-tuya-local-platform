@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 class SimpleDimmer2Accessory extends BaseAccessory {
   static getCategory(Categories: any): number {
@@ -64,11 +64,11 @@ class SimpleDimmer2Accessory extends BaseAccessory {
     }
   }
 
-  getBrightness(callback: HomebridgeCallback): void {
+  getBrightness(callback: OpenbridgeCallback): void {
     callback(null, this.convertBrightnessFromTuyaToHomeKit(this.device.state[this.dpBrightness]))
   }
 
-  setBrightness(value: DPSValue, callback: HomebridgeCallback): void {
+  setBrightness(value: DPSValue, callback: OpenbridgeCallback): void {
     this.setState(this.dpBrightness, this.convertBrightnessFromHomeKitToTuya(value), callback)
   }
 }

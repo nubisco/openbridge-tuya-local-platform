@@ -1,10 +1,10 @@
 import BaseAccessory from './Base.accessory'
 import async from 'async'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 interface PendingPower {
   props: DPSState
-  callbacks: HomebridgeCallback[]
+  callbacks: OpenbridgeCallback[]
   timer?: ReturnType<typeof setTimeout>
 }
 
@@ -96,11 +96,11 @@ class SwitchAccessory extends BaseAccessory {
     }
   }
 
-  getPower(dp: string, callback: HomebridgeCallback): void {
+  getPower(dp: string, callback: OpenbridgeCallback): void {
     callback(null, this.device.state[dp])
   }
 
-  setPower(dp?: string, value?: DPSValue, callback?: HomebridgeCallback): void {
+  setPower(dp?: string, value?: DPSValue, callback?: OpenbridgeCallback): void {
     if (!this._pendingPower) {
       this._pendingPower = { props: {}, callbacks: [] }
     }
@@ -119,7 +119,7 @@ class SwitchAccessory extends BaseAccessory {
 
     const callbacks = this._pendingPower.callbacks
     const callEachBack = (err: Error | null) => {
-      async.eachSeries(callbacks, (callback: HomebridgeCallback, next: () => void) => {
+      async.eachSeries(callbacks, (callback: OpenbridgeCallback, next: () => void) => {
         try {
           callback(err)
         } catch (_ex) {

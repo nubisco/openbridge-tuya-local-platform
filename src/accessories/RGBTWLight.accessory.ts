@@ -1,10 +1,10 @@
 import BaseAccessory from './Base.accessory'
 import async from 'async'
-import type { DPSState, DPSValue, HomebridgeCallback, HSBColor } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback, HSBColor } from '../types'
 
 interface PendingHueSaturation {
   props: Partial<HSBColor>
-  callbacks: HomebridgeCallback[]
+  callbacks: OpenbridgeCallback[]
   timer?: ReturnType<typeof setTimeout>
 }
 
@@ -184,24 +184,24 @@ class RGBTWLightAccessory extends BaseAccessory {
     }
   }
 
-  getBrightness(callback: HomebridgeCallback): void {
+  getBrightness(callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] === this.cmdWhite)
       return callback(null, this.convertBrightnessFromTuyaToHomeKit(this.device.state[this.dpBrightness]))
     callback(null, this.convertColorFromTuyaToHomeKit(this.device.state[this.dpColor]).b)
   }
 
-  setBrightness(value: DPSValue, callback: HomebridgeCallback): void {
+  setBrightness(value: DPSValue, callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] === this.cmdWhite)
       return this.setState(this.dpBrightness, this.convertBrightnessFromHomeKitToTuya(value), callback)
     this.setState(this.dpColor, this.convertColorFromHomeKitToTuya({ b: value as number }), callback)
   }
 
-  getColorTemperature(callback: HomebridgeCallback): void {
+  getColorTemperature(callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] !== this.cmdWhite) return callback(null, 0)
     callback(null, this.convertColorTemperatureFromTuyaToHomeKit(this.device.state[this.dpColorTemperature]))
   }
 
-  setColorTemperature(value: DPSValue, callback: HomebridgeCallback): void {
+  setColorTemperature(value: DPSValue, callback: OpenbridgeCallback): void {
     this.log.debug(`setColorTemperature: ${value}`)
     if (value === 0) return callback(null, true)
 
@@ -215,25 +215,25 @@ class RGBTWLightAccessory extends BaseAccessory {
     )
   }
 
-  getHue(callback: HomebridgeCallback): void {
+  getHue(callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] === this.cmdWhite) return callback(null, 0)
     callback(null, this.convertColorFromTuyaToHomeKit(this.device.state[this.dpColor]).h)
   }
 
-  setHue(value: DPSValue, callback: HomebridgeCallback): void {
+  setHue(value: DPSValue, callback: OpenbridgeCallback): void {
     this._setHueSaturation({ h: value as number }, callback)
   }
 
-  getSaturation(callback: HomebridgeCallback): void {
+  getSaturation(callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] === this.cmdWhite) return callback(null, 0)
     callback(null, this.convertColorFromTuyaToHomeKit(this.device.state[this.dpColor]).s)
   }
 
-  setSaturation(value: DPSValue, callback: HomebridgeCallback): void {
+  setSaturation(value: DPSValue, callback: OpenbridgeCallback): void {
     this._setHueSaturation({ s: value as number }, callback)
   }
 
-  _setHueSaturation(prop?: Partial<HSBColor>, callback?: HomebridgeCallback): void {
+  _setHueSaturation(prop?: Partial<HSBColor>, callback?: OpenbridgeCallback): void {
     if (!this._pendingHueSaturation) {
       this._pendingHueSaturation = { props: {}, callbacks: [] }
     }
@@ -254,7 +254,7 @@ class RGBTWLightAccessory extends BaseAccessory {
     const callEachBack = (err?: Error | null) => {
       async.eachSeries(
         callbacks,
-        (cb: HomebridgeCallback, next: () => void) => {
+        (cb: OpenbridgeCallback, next: () => void) => {
           try {
             cb(err || null)
           } catch (_ex) {

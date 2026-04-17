@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 class ConvectorAccessory extends BaseAccessory {
   static getCategory(Categories: any): number {
@@ -185,7 +185,7 @@ class ConvectorAccessory extends BaseAccessory {
     }
   }
 
-  getActive(callback: HomebridgeCallback): void {
+  getActive(callback: OpenbridgeCallback): void {
     this.getState(this.dpActive, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getActive(dp))
@@ -197,7 +197,7 @@ class ConvectorAccessory extends BaseAccessory {
     return dp ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE
   }
 
-  setActive(value: DPSValue, callback: HomebridgeCallback): void {
+  setActive(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
 
     switch (value) {
@@ -210,7 +210,7 @@ class ConvectorAccessory extends BaseAccessory {
     callback()
   }
 
-  getLockPhysicalControls(callback: HomebridgeCallback): void {
+  getLockPhysicalControls(callback: OpenbridgeCallback): void {
     this.getState(this.dpChildLock, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getLockPhysicalControls(dp))
@@ -224,7 +224,7 @@ class ConvectorAccessory extends BaseAccessory {
       : Characteristic.LockPhysicalControls.CONTROL_LOCK_DISABLED
   }
 
-  setLockPhysicalControls(value: DPSValue, callback: HomebridgeCallback): void {
+  setLockPhysicalControls(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
 
     switch (value) {
@@ -237,7 +237,7 @@ class ConvectorAccessory extends BaseAccessory {
     callback()
   }
 
-  getCurrentHeaterCoolerState(callback: HomebridgeCallback): void {
+  getCurrentHeaterCoolerState(callback: OpenbridgeCallback): void {
     this.getState([this.dpActive], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getCurrentHeaterCoolerState(dps))
@@ -251,7 +251,7 @@ class ConvectorAccessory extends BaseAccessory {
       : Characteristic.CurrentHeaterCoolerState.INACTIVE
   }
 
-  getTargetHeaterCoolerState(callback: HomebridgeCallback): void {
+  getTargetHeaterCoolerState(callback: OpenbridgeCallback): void {
     callback(null, this._getTargetHeaterCoolerState())
   }
 
@@ -260,11 +260,11 @@ class ConvectorAccessory extends BaseAccessory {
     return Characteristic.TargetHeaterCoolerState.HEAT
   }
 
-  setTargetHeaterCoolerState(value: DPSValue, callback: HomebridgeCallback): void {
+  setTargetHeaterCoolerState(value: DPSValue, callback: OpenbridgeCallback): void {
     this.setState(this.dpActive, true, callback)
   }
 
-  setTargetThresholdTemperature(value: DPSValue, callback: HomebridgeCallback): void {
+  setTargetThresholdTemperature(value: DPSValue, callback: OpenbridgeCallback): void {
     this.setState(this.dpDesiredTemperature, value, (err: Error | null) => {
       if (err) return callback(err)
 
@@ -276,7 +276,7 @@ class ConvectorAccessory extends BaseAccessory {
     })
   }
 
-  getTemperatureDisplayUnits(callback: HomebridgeCallback): void {
+  getTemperatureDisplayUnits(callback: OpenbridgeCallback): void {
     this.getState(this.dpTemperatureDisplayUnits, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getTemperatureDisplayUnits(dp))
@@ -290,7 +290,7 @@ class ConvectorAccessory extends BaseAccessory {
       : Characteristic.TemperatureDisplayUnits.CELSIUS
   }
 
-  setTemperatureDisplayUnits(value: DPSValue, callback: HomebridgeCallback): void {
+  setTemperatureDisplayUnits(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
     this.setState(
       this.dpTemperatureDisplayUnits,
@@ -299,7 +299,7 @@ class ConvectorAccessory extends BaseAccessory {
     )
   }
 
-  getRotationSpeed(callback: HomebridgeCallback): void {
+  getRotationSpeed(callback: OpenbridgeCallback): void {
     this.getState([this.dpActive, this.dpRotationSpeed], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getRotationSpeed(dps))
@@ -319,7 +319,7 @@ class ConvectorAccessory extends BaseAccessory {
     return (this._hkRotationSpeed = this.convertRotationSpeedFromTuyaToHomeKit(dps[this.dpRotationSpeed]))
   }
 
-  setRotationSpeed(value: number, callback: HomebridgeCallback): void {
+  setRotationSpeed(value: number, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
 
     if (value === 0) {

@@ -1,6 +1,6 @@
 import BaseAccessory from './Base.accessory'
 import async from 'async'
-import type { DPSState, DPSValue, HomebridgeCallback, HSBColor } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback, HSBColor } from '../types'
 
 class OilDiffuserAccessory extends BaseAccessory {
   static getCategory(Categories: any): number {
@@ -32,7 +32,7 @@ class OilDiffuserAccessory extends BaseAccessory {
   _hkRotationSpeed?: number
   _pendingHueSaturation: {
     props: Partial<HSBColor>
-    callbacks: HomebridgeCallback[]
+    callbacks: OpenbridgeCallback[]
     timer?: ReturnType<typeof setTimeout>
   } | null = null
   _justRegistered?: boolean
@@ -285,13 +285,13 @@ class OilDiffuserAccessory extends BaseAccessory {
     }
   }
 
-  getBrightness(callback: HomebridgeCallback): void {
+  getBrightness(callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] === this.cmdWhite)
       return callback(null, this.convertBrightnessFromTuyaToHomeKit(this.device.state[this.dpColor]))
     callback(null, this.convertColorFromTuyaToHomeKit(this.device.state[this.dpColor]).b)
   }
 
-  setBrightness(value: number, callback: HomebridgeCallback): void {
+  setBrightness(value: number, callback: OpenbridgeCallback): void {
     if (value === 0) {
       return this.setState(this.dpLight, false, callback)
     } else {
@@ -305,12 +305,12 @@ class OilDiffuserAccessory extends BaseAccessory {
     }
   }
 
-  getColorTemperature(callback: HomebridgeCallback): void {
+  getColorTemperature(callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] !== this.cmdWhite) return callback(null, 0)
     callback(null, this.convertColorTemperatureFromTuyaToHomeKit(this.device.state[(this as any).dpColorTemperature]))
   }
 
-  setColorTemperature(value: number, callback: HomebridgeCallback): void {
+  setColorTemperature(value: number, callback: OpenbridgeCallback): void {
     if (value === 0) return callback(null, true)
 
     const newColor = this.convertHomeKitColorTemperatureToHomeKitColor(value)
@@ -325,24 +325,24 @@ class OilDiffuserAccessory extends BaseAccessory {
     )
   }
 
-  getHue(callback: HomebridgeCallback): void {
+  getHue(callback: OpenbridgeCallback): void {
     if (this.device.state[this.dpMode] === this.cmdWhite) return callback(null, 0)
     callback(null, this.convertColorFromTuyaToHomeKit(this.device.state[this.dpColor]).h)
   }
 
-  setHue(value: number, callback: HomebridgeCallback): void {
+  setHue(value: number, callback: OpenbridgeCallback): void {
     this._setHueSaturation({ h: value }, callback)
   }
 
-  getSaturation(callback: HomebridgeCallback): void {
+  getSaturation(callback: OpenbridgeCallback): void {
     callback(null, this.convertColorFromTuyaToHomeKit(this.device.state[this.dpColor]).s)
   }
 
-  setSaturation(value: number, callback: HomebridgeCallback): void {
+  setSaturation(value: number, callback: OpenbridgeCallback): void {
     this._setHueSaturation({ s: value }, callback)
   }
 
-  _setHueSaturation(prop?: Partial<HSBColor>, callback?: HomebridgeCallback): void {
+  _setHueSaturation(prop?: Partial<HSBColor>, callback?: OpenbridgeCallback): void {
     if (!this._pendingHueSaturation) {
       this._pendingHueSaturation = { props: {}, callbacks: [] }
     }
@@ -361,7 +361,7 @@ class OilDiffuserAccessory extends BaseAccessory {
 
     const callbacks = this._pendingHueSaturation.callbacks
     const callEachBack = (err: Error | null) => {
-      async.eachSeries(callbacks, (callback: HomebridgeCallback, next: () => void) => {
+      async.eachSeries(callbacks, (callback: OpenbridgeCallback, next: () => void) => {
         try {
           callback(err)
         } catch (_ex) {
@@ -377,7 +377,7 @@ class OilDiffuserAccessory extends BaseAccessory {
     this.setMultiState({ [this.dpMode]: this.cmdColor, [this.dpColor]: newValue }, callEachBack)
   }
 
-  getActive(callback: HomebridgeCallback): void {
+  getActive(callback: OpenbridgeCallback): void {
     this.getState(this.dpActive, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getActive(dp))
@@ -389,7 +389,7 @@ class OilDiffuserAccessory extends BaseAccessory {
     return dp ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE
   }
 
-  setActive(value: DPSValue, callback: HomebridgeCallback): void {
+  setActive(value: DPSValue, callback: OpenbridgeCallback): void {
     if (this.characteristicActive.value !== value) {
       const { Characteristic } = this.hap
       switch (value) {
@@ -402,7 +402,7 @@ class OilDiffuserAccessory extends BaseAccessory {
     }
   }
 
-  getCurrentHumidifierDehumidifierState(callback: HomebridgeCallback): void {
+  getCurrentHumidifierDehumidifierState(callback: OpenbridgeCallback): void {
     this.getState([this.dpActive], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getCurrentHumidifierDehumidifierState(dps))
@@ -416,7 +416,7 @@ class OilDiffuserAccessory extends BaseAccessory {
       : Characteristic.CurrentHumidifierDehumidifierState.INACTIVE
   }
 
-  getTargetHumidifierDehumidifierState(callback: HomebridgeCallback): void {
+  getTargetHumidifierDehumidifierState(callback: OpenbridgeCallback): void {
     this.getState([this.dpActive], (err: Error | null, _dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getTargetHumidifierDehumidifierState())
@@ -428,11 +428,11 @@ class OilDiffuserAccessory extends BaseAccessory {
     return Characteristic.TargetHumidifierDehumidifierState.HUMIDIFIER
   }
 
-  setTargetHumidifierDehumidifierState(value: DPSValue, callback: HomebridgeCallback): void {
+  setTargetHumidifierDehumidifierState(value: DPSValue, callback: OpenbridgeCallback): void {
     this.setState(this.dpActive, true, callback)
   }
 
-  getWaterLevel(callback: HomebridgeCallback): void {
+  getWaterLevel(callback: OpenbridgeCallback): void {
     this.getState(this.dpWaterLevel, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getWaterLevel(dp))
@@ -447,7 +447,7 @@ class OilDiffuserAccessory extends BaseAccessory {
     }
   }
 
-  getRotationSpeed(callback: HomebridgeCallback): void {
+  getRotationSpeed(callback: OpenbridgeCallback): void {
     this.getState([this.dpActive, this.dpRotationSpeed], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getRotationSpeed(dps))
@@ -466,7 +466,7 @@ class OilDiffuserAccessory extends BaseAccessory {
     return (this._hkRotationSpeed = this.convertRotationSpeedFromTuyaToHomeKit(dps[this.dpRotationSpeed]))
   }
 
-  setRotationSpeed(value: number, callback: HomebridgeCallback): void {
+  setRotationSpeed(value: number, callback: OpenbridgeCallback): void {
     if (value === 0) {
       this.setState(this.dpActive, false, callback)
     } else {

@@ -1,4 +1,4 @@
-import type { Characteristic as CharacteristicType, WithUUID } from 'homebridge'
+import type { Characteristic as CharacteristicType, WithUUID } from 'openbridge'
 import type { EnergyCharacteristicsMap } from '../types'
 
 const createEnergyCharacteristics = (Characteristic: any): EnergyCharacteristicsMap => {

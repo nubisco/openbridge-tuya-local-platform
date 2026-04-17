@@ -15,13 +15,13 @@ Control Tuya-based smart devices locally over LAN through OpenBridge and Apple H
 - **Safety controls** -- confirmation dialogs for safety-critical devices (circuit breakers)
 - **Multi-protocol** -- supports Tuya protocol versions 3.1, 3.3, and 3.4
 
-## What's Different from Homebridge Tuya Local Platform?
+## What's Different from Openbridge Tuya Local Platform?
 
-This plugin is forked from [`@nubisco/homebridge-tuya-local-platform`](https://github.com/nubisco/homebridge-tuya-local-platform) with the following improvements:
+This plugin is forked from [`@nubisco/openbridge-tuya-local-platform`](https://github.com/nubisco/openbridge-tuya-local-platform) with the following improvements:
 
 - **All 23 accessory types report telemetry** to the OpenBridge devices view (power state, temperature, humidity, energy data)
 - **All controllable accessories register controls** for the OpenBridge UI (on/off, target temperature, target humidity)
-- **Native OpenBridge plugin loader** with standalone HAP bridge -- no Homebridge required
+- **Native OpenBridge plugin loader** with standalone HAP bridge -- no Openbridge required
 - **Energy history accumulation** for circuit breaker monitors (day/month/year views)
 - **Zod-validated configuration** with clear error messages on invalid config
 

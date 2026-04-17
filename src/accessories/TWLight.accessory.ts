@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 class TWLightAccessory extends BaseAccessory {
   static getCategory(Categories: any): number {
@@ -101,19 +101,19 @@ class TWLightAccessory extends BaseAccessory {
     }
   }
 
-  getBrightness(callback: HomebridgeCallback): void {
+  getBrightness(callback: OpenbridgeCallback): void {
     return callback(null, this.convertBrightnessFromTuyaToHomeKit(this.device.state[this.dpBrightness]))
   }
 
-  setBrightness(value: DPSValue, callback: HomebridgeCallback): void {
+  setBrightness(value: DPSValue, callback: OpenbridgeCallback): void {
     return this.setState(this.dpBrightness, this.convertBrightnessFromHomeKitToTuya(value), callback)
   }
 
-  getColorTemperature(callback: HomebridgeCallback): void {
+  getColorTemperature(callback: OpenbridgeCallback): void {
     callback(null, this.convertColorTemperatureFromTuyaToHomeKit(this.device.state[this.dpColorTemperature]))
   }
 
-  setColorTemperature(value: DPSValue, callback: HomebridgeCallback): void {
+  setColorTemperature(value: DPSValue, callback: OpenbridgeCallback): void {
     if (value === 0) return callback(null, true)
     this.setState(this.dpColorTemperature, this.convertColorTemperatureFromHomeKitToTuya(value), callback)
   }

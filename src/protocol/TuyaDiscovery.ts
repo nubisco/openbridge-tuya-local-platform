@@ -1,7 +1,7 @@
 import dgram from 'dgram'
 import crypto from 'crypto'
 import { EventEmitter } from 'events'
-import type { Logger } from 'homebridge'
+import type { Logger } from 'openbridge'
 import type { DiscoveredDevice } from '../types'
 
 const UDP_KEY = Buffer.from('6c1ec8e2bb9bb59ab50b0daf649b410a', 'hex')

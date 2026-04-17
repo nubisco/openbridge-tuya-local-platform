@@ -6,20 +6,20 @@
 
 <br /><br />
 
-# Homebridge Tuya Local Platform
+# Openbridge Tuya Local Platform
 
 **Control Tuya smart devices locally over LAN through Apple HomeKit. No cloud, no latency.**
 
   <br />
 
-[![CI](https://github.com/nubisco/homebridge-tuya-local-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/nubisco/homebridge-tuya-local-platform/actions/workflows/ci.yml)
-[![GitHub release](https://img.shields.io/github/v/release/nubisco/homebridge-tuya-local-platform)](https://github.com/nubisco/homebridge-tuya-local-platform/releases)
-[![npm version](https://img.shields.io/npm/v/@nubisco/homebridge-tuya-local-platform)](https://www.npmjs.com/package/@nubisco/homebridge-tuya-local-platform)
-[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/nubisco/homebridge-tuya-local-platform/badges/coverage.json)](https://github.com/nubisco/homebridge-tuya-local-platform/actions/workflows/ci.yml)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-339933)](https://www.npmjs.com/package/@nubisco/homebridge-tuya-local-platform)
-[![Homebridge](https://img.shields.io/badge/homebridge-%3E%3D1.6.0-blue)](https://homebridge.io)
-[![license](https://img.shields.io/npm/l/@nubisco/homebridge-tuya-local-platform)](LICENSE)
-[![Docs](https://img.shields.io/website?url=https%3A%2F%2Fdocs.nubisco.io%2Fhomebridge-tuya-local-platform%2F&label=docs)](https://docs.nubisco.io/homebridge-tuya-local-platform/)
+[![CI](https://github.com/nubisco/openbridge-tuya-local-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/nubisco/openbridge-tuya-local-platform/actions/workflows/ci.yml)
+[![GitHub release](https://img.shields.io/github/v/release/nubisco/openbridge-tuya-local-platform)](https://github.com/nubisco/openbridge-tuya-local-platform/releases)
+[![npm version](https://img.shields.io/npm/v/@nubisco/openbridge-tuya-local-platform)](https://www.npmjs.com/package/@nubisco/openbridge-tuya-local-platform)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/nubisco/openbridge-tuya-local-platform/badges/coverage.json)](https://github.com/nubisco/openbridge-tuya-local-platform/actions/workflows/ci.yml)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-339933)](https://www.npmjs.com/package/@nubisco/openbridge-tuya-local-platform)
+[![Openbridge](https://img.shields.io/badge/openbridge-%3E%3D1.6.0-blue)](https://openbridge.io)
+[![license](https://img.shields.io/npm/l/@nubisco/openbridge-tuya-local-platform)](LICENSE)
+[![Docs](https://img.shields.io/website?url=https%3A%2F%2Fdocs.nubisco.io%2Fopenbridge-tuya-local-platform%2F&label=docs)](https://docs.nubisco.io/openbridge-tuya-local-platform/)
 
 </div>
 
@@ -27,7 +27,7 @@
 
 ## Table of Contents
 
-- [Homebridge Tuya Local Platform](#homebridge-tuya-local-platform)
+- [Openbridge Tuya Local Platform](#openbridge-tuya-local-platform)
   - [Table of Contents](#table-of-contents)
   - [Quick Start](#quick-start)
   - [Why Local Control?](#why-local-control)
@@ -43,19 +43,19 @@
 
 ## Quick Start
 
-**Option 1 — Homebridge UI (recommended):**
+**Option 1 — Openbridge UI (recommended):**
 
-1. Open the Homebridge web UI and navigate to the **Plugins** tab.
-2. Search for `@nubisco/homebridge-tuya-local-platform` and click **Install**.
-3. Use the plugin's settings form to add your devices, then restart Homebridge.
+1. Open the Openbridge web UI and navigate to the **Plugins** tab.
+2. Search for `@nubisco/openbridge-tuya-local-platform` and click **Install**.
+3. Use the plugin's settings form to add your devices, then restart Openbridge.
 
 **Option 2 — Command line:**
 
 ```bash
-npm install -g @nubisco/homebridge-tuya-local-platform
+npm install -g @nubisco/openbridge-tuya-local-platform
 ```
 
-Add to your Homebridge `config.json`:
+Add to your Openbridge `config.json`:
 
 ```json
 {
@@ -75,7 +75,7 @@ Add to your Homebridge `config.json`:
 }
 ```
 
-> **Need your device credentials?** See the [Getting Local Keys](https://docs.nubisco.io/homebridge-tuya-local-platform/get-local-keys) guide.
+> **Need your device credentials?** See the [Getting Local Keys](https://docs.nubisco.io/openbridge-tuya-local-platform/get-local-keys) guide.
 
 ---
 
@@ -132,19 +132,19 @@ Tuya's cloud relies on remote servers — any outage, policy change, or internet
 
 > The `type` value is **case-insensitive**. `"SimpleLight"`, `"simplelight"`, and `"SIMPLELIGHT"` all work.
 
-Full per-device configuration details and DataPoint overrides are covered in the [Supported Device Types](https://docs.nubisco.io/homebridge-tuya-local-platform/device-types) docs.
+Full per-device configuration details and DataPoint overrides are covered in the [Supported Device Types](https://docs.nubisco.io/openbridge-tuya-local-platform/device-types) docs.
 
 ---
 
 ## Documentation
 
-Full documentation is available at **[docs.nubisco.io/homebridge-tuya-local-platform](https://docs.nubisco.io/homebridge-tuya-local-platform/)**, including:
+Full documentation is available at **[docs.nubisco.io/openbridge-tuya-local-platform](https://docs.nubisco.io/openbridge-tuya-local-platform/)**, including:
 
-- [Installation](https://docs.nubisco.io/homebridge-tuya-local-platform/installation)
-- [Getting Local Keys](https://docs.nubisco.io/homebridge-tuya-local-platform/get-local-keys)
-- [Configuration](https://docs.nubisco.io/homebridge-tuya-local-platform/configuration)
-- [Supported Device Types](https://docs.nubisco.io/homebridge-tuya-local-platform/device-types)
-- [Troubleshooting](https://docs.nubisco.io/homebridge-tuya-local-platform/troubleshooting)
+- [Installation](https://docs.nubisco.io/openbridge-tuya-local-platform/installation)
+- [Getting Local Keys](https://docs.nubisco.io/openbridge-tuya-local-platform/get-local-keys)
+- [Configuration](https://docs.nubisco.io/openbridge-tuya-local-platform/configuration)
+- [Supported Device Types](https://docs.nubisco.io/openbridge-tuya-local-platform/device-types)
+- [Troubleshooting](https://docs.nubisco.io/openbridge-tuya-local-platform/troubleshooting)
 
 ---
 
@@ -162,10 +162,10 @@ For security vulnerabilities, please see [SECURITY.md](SECURITY.md) for responsi
 
 ## Support this project
 
-If this plugin helps your Homebridge setup, consider sponsoring development. Maintaining device integrations, testing hardware, and providing support takes significant time — GitHub Sponsors helps ensure long-term maintenance.
+If this plugin helps your Openbridge setup, consider sponsoring development. Maintaining device integrations, testing hardware, and providing support takes significant time — GitHub Sponsors helps ensure long-term maintenance.
 
 - ❤️ [Sponsor via GitHub](https://github.com/sponsors/joseporto)
-- ⭐ [Star the repository](https://github.com/nubisco/homebridge-tuya-local-platform)
+- ⭐ [Star the repository](https://github.com/nubisco/openbridge-tuya-local-platform)
 
 ---
 

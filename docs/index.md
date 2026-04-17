@@ -21,7 +21,7 @@ hero:
 
 features:
   - icon:
-      src: /homebridge.svg
+      src: /openbridge.svg
     title: OpenBridge Native
     details: Seamless Apple HomeKit integration via OpenBridge with full accessory lifecycle management and Config UI X support.
   - icon:

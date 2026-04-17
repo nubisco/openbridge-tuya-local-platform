@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, HomebridgeCallback } from '../types'
+import type { DPSState, OpenbridgeCallback } from '../types'
 
 class ValveAccessory extends BaseAccessory {
   static getCategory(Categories: any): number {
@@ -56,14 +56,14 @@ class ValveAccessory extends BaseAccessory {
 
     const characteristicInUse = service
       .getCharacteristic(Characteristic.InUse)
-      .on('get', (next: HomebridgeCallback) => {
+      .on('get', (next: OpenbridgeCallback) => {
         next(null, characteristicActive.value)
       })
 
     if (!this.noTimer) {
       service
         .getCharacteristic(Characteristic.SetDuration)
-        .on('get', (next: HomebridgeCallback) => {
+        .on('get', (next: OpenbridgeCallback) => {
           next(null, this.setDuration)
         })
         .on('change', (data: any) => {
@@ -84,7 +84,7 @@ class ValveAccessory extends BaseAccessory {
           }
         })
 
-      service.getCharacteristic(Characteristic.RemainingDuration).on('get', (next: HomebridgeCallback) => {
+      service.getCharacteristic(Characteristic.RemainingDuration).on('get', (next: OpenbridgeCallback) => {
         let remainingTime =
           this.setDuration - Math.floor((new Date().getTime() - (this.lastActivationTime || 0)) / 1000)
         if (!remainingTime || remainingTime < 0) remainingTime = 0
@@ -116,7 +116,7 @@ class ValveAccessory extends BaseAccessory {
         }
       })
 
-      // If Homebridge crash when valve is on the timer reset
+      // If Openbridge crash when valve is on the timer reset
       if (dps[this.dpPower]) {
         this.lastActivationTime = new Date().getTime()
         service.getCharacteristic(Characteristic.RemainingDuration).updateValue(this.setDuration)

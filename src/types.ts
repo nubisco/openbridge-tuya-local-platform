@@ -7,9 +7,9 @@ import type {
   PlatformAccessory,
   Service,
   WithUUID,
-} from 'homebridge'
+} from 'openbridge'
 
-// Re-export homebridge types used throughout
+// Re-export openbridge types used throughout
 export type { API, Categories, Characteristic, CharacteristicValue, Logger, PlatformAccessory, Service }
 
 export interface HAPContext {
@@ -77,7 +77,7 @@ export interface TuyaPlatformConfig {
   devices: TuyaDeviceConfig[]
 }
 
-export type HomebridgeCallback = (err?: Error | null, value?: CharacteristicValue) => void
+export type OpenbridgeCallback = (err?: Error | null, value?: CharacteristicValue) => void
 
 export interface RoomToWaterMapEntry {
   room: number
@@ -107,7 +107,7 @@ export interface CircuitBreakerTelemetry {
 
 export interface PendingCallbacks {
   props: Record<string, DPSValue>
-  callbacks: HomebridgeCallback[]
+  callbacks: OpenbridgeCallback[]
   timer?: ReturnType<typeof setTimeout>
 }
 

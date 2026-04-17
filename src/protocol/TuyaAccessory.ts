@@ -2,7 +2,7 @@ import net from 'net'
 import async from 'async'
 import crypto from 'crypto'
 import { EventEmitter } from 'events'
-import type { Logger } from 'homebridge'
+import type { Logger } from 'openbridge'
 import type { DPSState, DPSValue, TuyaDeviceContext } from '../types'
 
 const isNonEmptyPlainObject = (o: unknown): o is Record<string, unknown> => {

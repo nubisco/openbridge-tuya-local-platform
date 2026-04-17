@@ -199,7 +199,7 @@ docs/
 
 When opening an issue, include:
 
-- **OpenBridge version**: `homebridge -V`
+- **OpenBridge version**: `openbridge -V`
 - **Node.js version**: `node -v`
 - **Plugin version**: Check in OpenBridge UI or `npm list openbridge-tuya-local-platform`
 - **Device information**:

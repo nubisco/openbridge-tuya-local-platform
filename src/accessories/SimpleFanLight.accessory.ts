@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 class SimpleFanLightAccessory extends BaseAccessory {
   static getCategory(Categories: any): number {
@@ -130,7 +130,7 @@ class SimpleFanLightAccessory extends BaseAccessory {
     }
   }
 
-  getFanOn(callback: HomebridgeCallback): void {
+  getFanOn(callback: OpenbridgeCallback): void {
     this.getState(this.dpFanOn, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getFanOn(dp))
@@ -141,7 +141,7 @@ class SimpleFanLightAccessory extends BaseAccessory {
     return dp
   }
 
-  setFanOn(value: DPSValue, callback: HomebridgeCallback): void {
+  setFanOn(value: DPSValue, callback: OpenbridgeCallback): void {
     if (value == false) {
       this.fanCurrentSpeed = 0
       return this.setState(this.dpFanOn, false, callback)
@@ -174,14 +174,14 @@ class SimpleFanLightAccessory extends BaseAccessory {
     }
   }
 
-  getSpeed(callback: HomebridgeCallback): void {
+  getSpeed(callback: OpenbridgeCallback): void {
     this.getState(this.dpRotationSpeed, (err: Error | null, _dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this.convertRotationSpeedFromTuyaToHomeKit(this.device.state[this.dpRotationSpeed]))
     })
   }
 
-  setSpeed(value: DPSValue, callback: HomebridgeCallback): void {
+  setSpeed(value: DPSValue, callback: OpenbridgeCallback): void {
     if (value === 0) {
       if (this.useStrings) {
         return this.setMultiStateLegacy(
@@ -213,7 +213,7 @@ class SimpleFanLightAccessory extends BaseAccessory {
     }
   }
 
-  getLightOn(callback: HomebridgeCallback): void {
+  getLightOn(callback: OpenbridgeCallback): void {
     this.getState(this.dpLightOn, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getLightOn(dp))
@@ -224,11 +224,11 @@ class SimpleFanLightAccessory extends BaseAccessory {
     return dp
   }
 
-  setLightOn(value: DPSValue, callback: HomebridgeCallback): void {
+  setLightOn(value: DPSValue, callback: OpenbridgeCallback): void {
     return this.setState(this.dpLightOn, value, callback)
   }
 
-  getBrightness(callback: HomebridgeCallback): void {
+  getBrightness(callback: OpenbridgeCallback): void {
     this.getState(this.dpBrightness, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getBrightness(dp))
@@ -239,7 +239,7 @@ class SimpleFanLightAccessory extends BaseAccessory {
     return dp
   }
 
-  setBrightness(value: DPSValue, callback: HomebridgeCallback): void {
+  setBrightness(value: DPSValue, callback: OpenbridgeCallback): void {
     return this.setState(this.dpBrightness, value, callback)
   }
 }

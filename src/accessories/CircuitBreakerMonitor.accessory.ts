@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback, CircuitBreakerTelemetry, PhaseData } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback, CircuitBreakerTelemetry, PhaseData } from '../types'
 
 /**
  * Circuit Breaker Monitor Accessory
@@ -177,7 +177,7 @@ class CircuitBreakerMonitorAccessory extends BaseAccessory {
 
   // Temperature Sensor
 
-  getTemperature(callback: HomebridgeCallback): void {
+  getTemperature(callback: OpenbridgeCallback): void {
     this.getState(this.dpTemperature, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       if (dp === undefined || dp === null) return callback(new Error('Temperature not yet available'))
@@ -201,7 +201,7 @@ class CircuitBreakerMonitorAccessory extends BaseAccessory {
 
   // Energy Consumption
 
-  getEnergy(callback: HomebridgeCallback): void {
+  getEnergy(callback: OpenbridgeCallback): void {
     this.getState(this.dpTotalForwardEnergy, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getEnergy({ [this.dpTotalForwardEnergy]: dp }))
@@ -224,7 +224,7 @@ class CircuitBreakerMonitorAccessory extends BaseAccessory {
 
   // Leak Detection (Leakage Current)
 
-  getLeakDetected(callback: HomebridgeCallback): void {
+  getLeakDetected(callback: OpenbridgeCallback): void {
     this.getState(this.dpLeakageCurrent, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getLeakDetected({ [this.dpLeakageCurrent]: dp }))
@@ -258,7 +258,7 @@ class CircuitBreakerMonitorAccessory extends BaseAccessory {
 
   // Fault Detection
 
-  getFaultState(callback: HomebridgeCallback): void {
+  getFaultState(callback: OpenbridgeCallback): void {
     this.getState(this.dpFault, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getFaultState({ [this.dpFault]: dp }))

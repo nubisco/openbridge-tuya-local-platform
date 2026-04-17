@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 // Action
 const GARAGE_DOOR_OPEN = 'open'
@@ -162,7 +162,7 @@ class GarageDoorAccessory extends BaseAccessory {
     }
   }
 
-  getTargetDoorState(callback: HomebridgeCallback): void {
+  getTargetDoorState(callback: OpenbridgeCallback): void {
     this.getState(this.dpStatus, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       this._debugLog('getTargetDoorState dp ' + JSON.stringify(dp))
@@ -196,7 +196,7 @@ class GarageDoorAccessory extends BaseAccessory {
     }
   }
 
-  setTargetDoorState(value: DPSValue, callback: HomebridgeCallback): void {
+  setTargetDoorState(value: DPSValue, callback: OpenbridgeCallback): void {
     let newValue: DPSValue = GARAGE_DOOR_CLOSE
     this._debugLog(
       'setTargetDoorState value ' + value + ' targetOpen ' + this.targetOpen + ' targetClosed ' + this.targetClosed,
@@ -229,7 +229,7 @@ class GarageDoorAccessory extends BaseAccessory {
     this.setState(this.dpAction, newValue, callback)
   }
 
-  getCurrentDoorState(callback: HomebridgeCallback): void {
+  getCurrentDoorState(callback: OpenbridgeCallback): void {
     this.getState(this.dpStatus, (err: Error | null, dpStatusValue: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getCurrentDoorState(dpStatusValue))

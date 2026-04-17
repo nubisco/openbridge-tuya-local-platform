@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 const DP_SWITCH = '1'
 const DP_PM25 = '2'
@@ -251,7 +251,7 @@ class AirPurifierAccessory extends BaseAccessory {
     }
   }
 
-  getActive(callback: HomebridgeCallback): void {
+  getActive(callback: OpenbridgeCallback): void {
     this.getState(DP_SWITCH, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getActive(dp))
@@ -263,7 +263,7 @@ class AirPurifierAccessory extends BaseAccessory {
     return dp ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE
   }
 
-  setActive(value: DPSValue, callback: HomebridgeCallback): void {
+  setActive(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
     switch (value) {
       case Characteristic.Active.ACTIVE:
@@ -274,7 +274,7 @@ class AirPurifierAccessory extends BaseAccessory {
     callback()
   }
 
-  getAirQuality(callback: HomebridgeCallback): void {
+  getAirQuality(callback: OpenbridgeCallback): void {
     this.getState([DP_PM25], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getAirQuality(dps))
@@ -311,7 +311,7 @@ class AirPurifierAccessory extends BaseAccessory {
     return 0
   }
 
-  getCurrentAirPurifierState(callback: HomebridgeCallback): void {
+  getCurrentAirPurifierState(callback: OpenbridgeCallback): void {
     this.getState(DP_SWITCH, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getCurrentAirPurifierState(dp))
@@ -323,7 +323,7 @@ class AirPurifierAccessory extends BaseAccessory {
     return dp ? Characteristic.CurrentAirPurifierState.PURIFYING_AIR : Characteristic.CurrentAirPurifierState.INACTIVE
   }
 
-  getLockPhysicalControls(callback: HomebridgeCallback): void {
+  getLockPhysicalControls(callback: OpenbridgeCallback): void {
     this.getState(DP_LOCK_PHYSICAL_CONTROLS, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getLockPhysicalControls(dp))
@@ -337,7 +337,7 @@ class AirPurifierAccessory extends BaseAccessory {
       : Characteristic.LockPhysicalControls.CONTROL_LOCK_DISABLED
   }
 
-  setLockPhysicalControls(value: DPSValue, callback: HomebridgeCallback): void {
+  setLockPhysicalControls(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
     switch (value) {
       case Characteristic.LockPhysicalControls.CONTROL_LOCK_ENABLED:
@@ -348,14 +348,14 @@ class AirPurifierAccessory extends BaseAccessory {
     callback()
   }
 
-  getPM25(callback: HomebridgeCallback): void {
+  getPM25(callback: OpenbridgeCallback): void {
     this.getState(DP_PM25, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, dp)
     })
   }
 
-  getRotationSpeed(callback: HomebridgeCallback): void {
+  getRotationSpeed(callback: OpenbridgeCallback): void {
     this.getState([DP_SWITCH, DP_FAN_SPEED], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getRotationSpeed(dps))
@@ -374,7 +374,7 @@ class AirPurifierAccessory extends BaseAccessory {
     return (this._hkRotationSpeed = this.convertRotationSpeedFromTuyaToHomeKit(dps[DP_FAN_SPEED]))
   }
 
-  setRotationSpeed(value: number, callback: HomebridgeCallback): void {
+  setRotationSpeed(value: number, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
     if (value === 0) {
       this.setActive(Characteristic.Active.INACTIVE, callback)
@@ -384,7 +384,7 @@ class AirPurifierAccessory extends BaseAccessory {
     }
   }
 
-  getTargetAirPurifierState(callback: HomebridgeCallback): void {
+  getTargetAirPurifierState(callback: OpenbridgeCallback): void {
     this.getState([DP_MODE, DP_FAN_SPEED], (err: Error | null, dps: DPSState) => {
       if (err) return callback(err)
       callback(null, this._getTargetAirPurifierState(this._getMode(dps)))
@@ -407,7 +407,7 @@ class AirPurifierAccessory extends BaseAccessory {
     }
   }
 
-  setTargetAirPurifierState(value: DPSValue, callback: HomebridgeCallback): void {
+  setTargetAirPurifierState(value: DPSValue, callback: OpenbridgeCallback): void {
     const { Characteristic } = this.hap
     switch (value) {
       case Characteristic.TargetAirPurifierState.MANUAL:

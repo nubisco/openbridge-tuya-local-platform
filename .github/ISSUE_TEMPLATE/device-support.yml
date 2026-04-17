@@ -51,7 +51,7 @@ body:
     id: logs
     attributes:
       label: Logs
-      description: Paste Homebridge logs while interacting with this device.
+      description: Paste Openbridge logs while interacting with this device.
       render: text
     validations:
       required: true

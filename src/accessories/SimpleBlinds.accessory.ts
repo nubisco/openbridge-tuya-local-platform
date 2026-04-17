@@ -1,5 +1,5 @@
 import BaseAccessory from './Base.accessory'
-import type { DPSState, DPSValue, HomebridgeCallback } from '../types'
+import type { DPSState, DPSValue, OpenbridgeCallback } from '../types'
 
 const BLINDS_OPENING = 'opening'
 const BLINDS_CLOSING = 'closing'
@@ -221,7 +221,7 @@ class SimpleBlindsAccessory extends BaseAccessory {
     }
   }
 
-  getCurrentPosition(callback: HomebridgeCallback): void {
+  getCurrentPosition(callback: OpenbridgeCallback): void {
     this.getState(this.dpAction, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getCurrentPosition(dp))
@@ -239,7 +239,7 @@ class SimpleBlindsAccessory extends BaseAccessory {
     }
   }
 
-  getTargetPosition(callback: HomebridgeCallback): void {
+  getTargetPosition(callback: OpenbridgeCallback): void {
     this.getState(this.dpAction, (err: Error | null, dp: DPSValue) => {
       if (err) return callback(err)
       callback(null, this._getTargetPosition(dp))
@@ -257,7 +257,7 @@ class SimpleBlindsAccessory extends BaseAccessory {
     }
   }
 
-  setTargetPosition(value: DPSValue, callback: HomebridgeCallback): void {
+  setTargetPosition(value: DPSValue, callback: OpenbridgeCallback): void {
     const numValue = value as number
     this.log.debug('[TuyaAccessory] Blinds asked to move from ' + this.assumedPosition + ' to ' + numValue)
 
@@ -313,7 +313,7 @@ class SimpleBlindsAccessory extends BaseAccessory {
     }
   }
 
-  getPositionState(callback: HomebridgeCallback): void {
+  getPositionState(callback: OpenbridgeCallback): void {
     const state = this._getPositionState()
     process.nextTick(() => {
       callback(null, state)

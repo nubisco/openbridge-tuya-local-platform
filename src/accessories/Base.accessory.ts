@@ -3,9 +3,9 @@ import type {
   Service as HAPService,
   Characteristic as HAPCharacteristic,
   WithUUID,
-} from 'homebridge'
+} from 'openbridge'
 import type TuyaAccessory from '../protocol/TuyaAccessory'
-import type { DPSState, DPSValue, HAPContext, HomebridgeCallback, HSBColor } from '../types'
+import type { DPSState, DPSValue, HAPContext, OpenbridgeCallback, HSBColor } from '../types'
 
 class BaseAccessory {
   platform: any
@@ -91,7 +91,7 @@ class BaseAccessory {
           : df
   }
 
-  getState(dp: string | string[], callback: HomebridgeCallback): void {
+  getState(dp: string | string[], callback: OpenbridgeCallback): void {
     if (!this.device.connected) return callback(new Error('Not connected'))
     const _callback = () => {
       if (Array.isArray(dp)) {
@@ -108,17 +108,17 @@ class BaseAccessory {
     process.nextTick(_callback)
   }
 
-  setState(dp: string, value: DPSValue, callback?: HomebridgeCallback): void {
+  setState(dp: string, value: DPSValue, callback?: OpenbridgeCallback): void {
     this.setMultiState({ [dp.toString()]: value }, callback)
   }
 
-  setMultiStateLegacy(dps: DPSState, callback: HomebridgeCallback): void {
+  setMultiStateLegacy(dps: DPSState, callback: OpenbridgeCallback): void {
     if (!this.device.connected) return callback(new Error('Not connected'))
     const ret = this.device.update(dps)
     if (callback) callback(!ret ? new Error('Update failed') : null)
   }
 
-  setMultiState(dps: DPSState, callback?: HomebridgeCallback): void {
+  setMultiState(dps: DPSState, callback?: OpenbridgeCallback): void {
     if (!this.device.connected) {
       if (callback) callback(new Error('Not connected'))
       return
@@ -131,7 +131,7 @@ class BaseAccessory {
     if (callback) callback(!this.__ret ? new Error('Update failed') : null)
   }
 
-  getDividedState(dp: string, divisor: number, callback: HomebridgeCallback): void {
+  getDividedState(dp: string, divisor: number, callback: OpenbridgeCallback): void {
     this.getState(dp, (err, data) => {
       if (err) return callback(err)
       if (!isFinite(data as number)) return callback(new Error('Invalid data'))
