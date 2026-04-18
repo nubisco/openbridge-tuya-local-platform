@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.2.2...v1.3.0) (2026-04-18)
+
+
+### Features
+
+* register HAP bridge info with OpenBridge for UI visibility ([ee5d80e](https://github.com/nubisco/openbridge-tuya-local-platform/commit/ee5d80e70417fd806d34d656633fd949ade0d3db))
+
 ## [1.2.2](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.2.1...v1.2.2) (2026-04-17)
 
 ### Bug Fixes
