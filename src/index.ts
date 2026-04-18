@@ -551,6 +551,17 @@ const nativePlugin = definePlugin({
     })
 
     ctx.log.info(`HAP bridge published on port ${hapPort} — pair with PIN: ${pincode}`)
+
+    // Register the HAP bridge info so the OpenBridge UI can show the QR code and PIN
+    if ((ctx as any).registerHapBridge) {
+      ;(ctx as any).registerHapBridge({
+        setupURI: bridge.setupURI(),
+        pincode,
+        port: hapPort,
+        name: bridgeName,
+      })
+    }
+
     ;(ctx as any)._bridge = bridge
   },
 
