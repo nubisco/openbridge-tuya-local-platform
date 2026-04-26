@@ -485,26 +485,60 @@ const nativePlugin = definePlugin({
   },
 
   async start(ctx: PluginContext) {
-    const hap = loadHap(ctx.log)
+    // Use the main OpenBridge HAP bridge when available (ctx.getHapBridge).
+    // Only fall back to creating a standalone bridge if running outside OpenBridge.
+    const mainBridge = (ctx as any).getHapBridge?.()
+    let hap: any
+    let bridge: any
+    let ownsBridge = false
 
-    const bridgeCfg = (ctx.config.bridge as Record<string, unknown>) ?? {}
-    const bridgeName = (bridgeCfg.name as string | undefined) ?? 'Tuya Local'
-    const username = (bridgeCfg.username as string | undefined) ?? 'CC:22:3D:E3:CE:30'
-    const pincode = (bridgeCfg.pincode as string | undefined) ?? '031-45-154'
-    const hapPort = (bridgeCfg.hapPort as number | undefined) ?? 51827
+    if (mainBridge) {
+      // Running inside OpenBridge: use the shared bridge
+      hap = mainBridge.hap
+      bridge = mainBridge.bridge
+      ctx.log.info('Using main OpenBridge HAP bridge (single pairing)')
+    } else {
+      // Standalone mode: create our own bridge (backward compat)
+      hap = loadHap(ctx.log)
+      const bridgeCfg = (ctx.config.bridge as Record<string, unknown>) ?? {}
+      const bridgeName = (bridgeCfg.name as string | undefined) ?? 'Tuya Local'
+      const username = (bridgeCfg.username as string | undefined) ?? 'CC:22:3D:E3:CE:30'
+      const pincode = (bridgeCfg.pincode as string | undefined) ?? '031-45-154'
+      const hapPort = (bridgeCfg.hapPort as number | undefined) ?? 51827
 
-    const storagePath = path.resolve(os.homedir(), '.openbridge', 'hap-storage')
-    try {
-      hap.HAPStorage.setCustomStoragePath(storagePath)
-    } catch {
-      // Storage path already set by the host (OpenBridge daemon) — safe to ignore
+      const storagePath = path.resolve(os.homedir(), '.openbridge', 'hap-storage')
+      try {
+        hap.HAPStorage.setCustomStoragePath(storagePath)
+      } catch {
+        // Storage path already set by the host
+      }
+
+      bridge = new hap.Bridge(bridgeName, hap.uuid.generate(bridgeName))
+      bridge
+        .getService(hap.Service.AccessoryInformation)
+        .setCharacteristic(hap.Characteristic.Manufacturer, 'Nubisco')
+        .setCharacteristic(hap.Characteristic.Model, 'OpenBridge Tuya Local')
+
+      bridge.publish({
+        username,
+        pincode,
+        port: hapPort,
+        category: hap.Categories.BRIDGE,
+      })
+
+      ctx.log.info(`HAP bridge published on port ${hapPort} (standalone mode)`)
+
+      if ((ctx as any).registerHapBridge) {
+        ;(ctx as any).registerHapBridge({
+          setupURI: bridge.setupURI(),
+          pincode,
+          port: hapPort,
+          name: bridgeName,
+        })
+      }
+
+      ownsBridge = true
     }
-
-    const bridge = new hap.Bridge(bridgeName, hap.uuid.generate(bridgeName))
-    bridge
-      .getService(hap.Service.AccessoryInformation)
-      .setCharacteristic(hap.Characteristic.Manufacturer, 'Nubisco')
-      .setCharacteristic(hap.Characteristic.Model, 'OpenBridge Tuya Local')
 
     const shim = createOpenbridgeShim(hap, bridge, ctx.log)
 
@@ -519,7 +553,7 @@ const nativePlugin = definePlugin({
 
     const platformConfig: TuyaPlatformConfig = {
       platform: PLATFORM_NAME,
-      name: bridgeName,
+      name: 'Tuya Local',
       devices: (ctx.config.devices as TuyaDeviceConfig[]) ?? [],
     }
 
@@ -543,29 +577,14 @@ const nativePlugin = definePlugin({
     // Give the platform a tick to register before emitting didFinishLaunching.
     setTimeout(() => shim.emit('didFinishLaunching'), 100)
 
-    bridge.publish({
-      username,
-      pincode,
-      port: hapPort,
-      category: hap.Categories.BRIDGE,
-    })
-
-    ctx.log.info(`HAP bridge published on port ${hapPort} — pair with PIN: ${pincode}`)
-
-    // Register the HAP bridge info so the OpenBridge UI can show the QR code and PIN
-    if ((ctx as any).registerHapBridge) {
-      ;(ctx as any).registerHapBridge({
-        setupURI: bridge.setupURI(),
-        pincode,
-        port: hapPort,
-        name: bridgeName,
-      })
+    // Store bridge reference only if we own it (for cleanup in stop())
+    if (ownsBridge) {
+      ;(ctx as any)._bridge = bridge
     }
-
-    ;(ctx as any)._bridge = bridge
   },
 
   async stop(ctx: PluginContext) {
+    // Only unpublish if we created our own bridge (standalone mode)
     const bridge = (ctx as any)._bridge
     if (bridge) {
       try {
