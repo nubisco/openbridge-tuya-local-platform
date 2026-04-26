@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.3.0...v1.4.0) (2026-04-26)
+
+
+### Features
+
+* use main OpenBridge HAP bridge instead of creating a standalone one ([8d63ce2](https://github.com/nubisco/openbridge-tuya-local-platform/commit/8d63ce2fbf8184bedbfe6e66845b9cfa5cc72725))
+
 # [1.3.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.2.2...v1.3.0) (2026-04-18)
 
 ### Features
