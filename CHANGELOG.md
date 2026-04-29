@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.4.0...v1.5.0) (2026-04-29)
+
+
+### Features
+
+* expose interpolation calibration metadata for MappedHeatPumpHeater ([9821a89](https://github.com/nubisco/openbridge-tuya-local-platform/commit/9821a895559029046748c598fb5f474b1f0c40a3))
+
 # [1.4.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.3.0...v1.4.0) (2026-04-26)
 
 
