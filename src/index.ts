@@ -580,8 +580,11 @@ const nativePlugin = definePlugin({
           outputLabel: 'Water Temperature (C)',
           inputMin: parseFloat(device.roomTargetMin) || 18,
           inputMax: parseFloat(device.roomTargetMax) || 24,
-          outputMin: parseFloat(device.waterTargetMin) || 35,
-          outputMax: parseFloat(device.waterTargetMax) || 55,
+          // Use wider range than the device's operational limits so the
+          // calibration chart remains usable across seasons. The device
+          // clamp in _mapRoomToWater still protects actual commands.
+          outputMin: 20,
+          outputMax: 60,
           configField: 'roomToWaterMap',
           configShape: { inputKey: 'room', outputKey: 'water' },
         }
