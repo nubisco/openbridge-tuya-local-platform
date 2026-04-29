@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.5.0...v1.5.1) (2026-04-29)
+
+
+### Bug Fixes
+
+* widen interpolation chart output range for seasonal calibration ([82ae656](https://github.com/nubisco/openbridge-tuya-local-platform/commit/82ae656f4310a5d75a6e8dd1cacc311da65c484d))
+
 # [1.5.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.4.0...v1.5.0) (2026-04-29)
 
 
