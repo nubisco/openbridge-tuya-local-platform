@@ -565,13 +565,29 @@ const nativePlugin = definePlugin({
     // Register devices so they appear in the OpenBridge devices view
     const deviceList = (ctx.config.devices as TuyaDeviceConfig[]) ?? []
     for (const device of deviceList) {
-      ctx.registerDevice({
+      const descriptor: Record<string, unknown> = {
         id: device.id,
         name: device.name ?? device.id,
         widgetType: tuyaTypeToWidgetType(device.type),
         manufacturer: (device as any).manufacturer,
         model: (device as any).model,
-      })
+      }
+
+      // Expose interpolation calibration for MappedHeatPumpHeater devices
+      if (device.type.toLowerCase() === 'mappedheatpumpheater') {
+        descriptor.interpolation = {
+          inputLabel: 'Room Temperature (C)',
+          outputLabel: 'Water Temperature (C)',
+          inputMin: parseFloat(device.roomTargetMin) || 18,
+          inputMax: parseFloat(device.roomTargetMax) || 24,
+          outputMin: parseFloat(device.waterTargetMin) || 35,
+          outputMax: parseFloat(device.waterTargetMax) || 55,
+          configField: 'roomToWaterMap',
+          configShape: { inputKey: 'room', outputKey: 'water' },
+        }
+      }
+
+      ctx.registerDevice(descriptor as any)
     }
 
     // Give the platform a tick to register before emitting didFinishLaunching.
