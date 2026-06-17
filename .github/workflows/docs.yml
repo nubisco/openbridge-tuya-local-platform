@@ -32,7 +32,7 @@ jobs:
       - run: npm ci
       - name: Build docs
         env:
-          VITE_ANALYTICS_ENDPOINT: ${{ vars.VITE_ANALYTICS_ENDPOINT }}
+          VITE_ANALYTICS_URL: ${{ vars.VITE_ANALYTICS_URL }}
         run: npm run docs:build
 
       - uses: actions/upload-pages-artifact@v3

@@ -24,6 +24,7 @@ export default defineConfig({
       {
         defer: '',
         src: 'https://analytics.nubisco.io/script.js',
+        'data-app': 'openbridge-tuya-docs',
       },
     ],
   ],
