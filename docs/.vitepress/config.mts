@@ -36,7 +36,7 @@ export default defineConfig({
 
   themeConfig: {
     siteTitle: 'Tuya Local Platform',
-    logo: { src: '/logo-mini.svg', width: 80, height: 24 },
+    logo: { src: '/logo-mini.svg', width: 24, height: 24 },
     nav: [
       { text: 'Guide', link: '/introduction' },
       { text: 'Configuration', link: '/configuration' },
