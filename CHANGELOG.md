@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.5.1...v1.6.0) (2026-09-08)
+
+
+### Bug Fixes
+
+* **docs:** add the OpenBridge icon and square the nav logo ([e5f6c90](https://github.com/nubisco/openbridge-tuya-local-platform/commit/e5f6c9057d47a48c5aad6fdac3d0f899b998b657))
+
+
+### Features
+
+* **docs:** new plugin icon and favicon ([a989ccb](https://github.com/nubisco/openbridge-tuya-local-platform/commit/a989ccba0c77970351da4fabee2b54fae1d6cac1))
+
 ## [1.5.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.5.0...v1.5.1) (2026-04-29)
 
 
