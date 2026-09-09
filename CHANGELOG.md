@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.0...v1.6.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* honour dp* overrides on Dehumidifier and expose scaleBrightness ([c00dfe4](https://github.com/nubisco/openbridge-tuya-local-platform/commit/c00dfe402c5a7723a9ef5771d5a7f1c0b819ac31)), closes [#29](https://github.com/nubisco/openbridge-tuya-local-platform/issues/29) [#30](https://github.com/nubisco/openbridge-tuya-local-platform/issues/30)
+
 # [1.6.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.5.1...v1.6.0) (2026-09-08)
 
 
