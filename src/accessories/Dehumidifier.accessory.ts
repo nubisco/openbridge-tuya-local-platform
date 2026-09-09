@@ -159,7 +159,10 @@ class DehumidifierAccessory extends BaseAccessory {
         }
       }
 
-      if (changes.hasOwnProperty('Humidity') && this.characteristicHumidity.value !== changes[this.getDp('Humidity')])
+      if (
+        changes.hasOwnProperty(this.getDp('Humidity')) &&
+        this.characteristicHumidity.value !== changes[this.getDp('Humidity')]
+      )
         this.characteristicHumidity.updateValue(changes[this.getDp('Humidity')])
 
       if (characteristicChildLock && changes.hasOwnProperty(this.getDp('ChildLock'))) {
@@ -319,7 +322,15 @@ class DehumidifierAccessory extends BaseAccessory {
   }
 
   getDp(name: string): string {
-    return this.device.context['dps' + name] ? this.device.context['dps' + name] : String(this.defaultDps[name])
+    // Config, docs and config.schema.json all use the `dp*` convention, matching every other
+    // accessory. The legacy `dps*` spelling is still honoured as a fallback. `dpTargetHumidity`
+    // is the documented name for the `Humidity` datapoint.
+    const aliases: Record<string, string> = { Humidity: 'dpTargetHumidity' }
+    const override =
+      this.device.context['dp' + name] ||
+      (aliases[name] ? this.device.context[aliases[name]] : undefined) ||
+      this.device.context['dps' + name]
+    return override ? String(override) : String(this.defaultDps[name])
   }
 }
 
