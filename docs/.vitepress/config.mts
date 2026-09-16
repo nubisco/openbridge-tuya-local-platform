@@ -55,7 +55,7 @@ export default defineConfig({
 
   head: [
     ['link', { rel: 'icon', href: '/openbridge-tuya-local-platform/favicon.ico' }],
-    ['meta', { name: 'theme-color', content: '#7c3aed' }],
+    ['meta', { name: 'theme-color', content: '#22335e' }],
     ['meta', { name: 'keywords', content: 'openbridge, tuya, local, homekit, plugin, smart-home' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'OpenBridge Tuya Local Platform' }],
