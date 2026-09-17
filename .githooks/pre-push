@@ -1,4 +1,5 @@
 #!/bin/sh
 set -eu
 
-exec npm run quality:check
+npm run quality:check
+exec npm run build
