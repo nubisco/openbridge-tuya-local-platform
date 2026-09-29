@@ -62,6 +62,22 @@ class DehumidifierAccessory extends BaseAccessory {
     super._registerPlatformAccessory()
   }
 
+  /**
+   * Push the device's state to OpenBridge's devices view.
+   *
+   * Called on first registration, on every reconnect and on every change. The
+   * reconnect case matters as much as the others: a device that never changes
+   * would otherwise report once at startup and then age into "stale" even
+   * though it is answering fine.
+   */
+  _reportTelemetry(state: DPSState): void {
+    if (!this.platform?.reportTelemetry || !state) return
+    const active = !!state[this.getDp('Active')]
+    const currentHumidity = this._getCurrentHumidity(state[this.getDp('CurrentHumidity')])
+    const targetHumidity = state[this.getDp('Humidity')]
+    this.platform.reportTelemetry(this.device.context.id, { active, currentHumidity, targetHumidity })
+  }
+
   _registerCharacteristics(dps: DPSState): void {
     const { Service, Characteristic } = this.hap
 
@@ -175,14 +191,19 @@ class DehumidifierAccessory extends BaseAccessory {
         if (characteristicSpeed.value !== newSpeed) characteristicSpeed.updateValue(newSpeed)
       }
 
-      // Report telemetry for the OpenBridge devices view
-      if (this.platform?.reportTelemetry) {
-        const active = !!state[this.getDp('Active')]
-        const currentHumidity = this._getCurrentHumidity(state[this.getDp('CurrentHumidity')])
-        const targetHumidity = state[this.getDp('Humidity')]
-        this.platform.reportTelemetry(this.device.context.id, { active, currentHumidity, targetHumidity })
-      }
+      this._reportTelemetry(state)
     })
+
+    // Report the state we already have, rather than waiting for it to change.
+    //
+    // Reporting only from the change handler is why this device sat in
+    // OpenBridge with empty telemetry and a "not responding" badge while being
+    // perfectly reachable and controllable from the Tuya app. It simply does
+    // not push: over one run it emitted zero change events while a heat pump on
+    // this same plugin emitted 39,577. Its full state arrives with every
+    // connect and was being thrown away.
+    this._reportTelemetry(dps)
+    this.device.on('connect', () => this._reportTelemetry(this.device.state))
 
     // Register OpenBridge controls
     if (this.platform?.registerControl) {
