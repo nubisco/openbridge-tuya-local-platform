@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.1...v1.6.2) (2026-09-29)
+
+
+### Bug Fixes
+
+* **dehumidifier:** report telemetry on connect, not only on change ([288bdd3](https://github.com/nubisco/openbridge-tuya-local-platform/commit/288bdd3e055d6c8065b78792782c6fe58ede4407))
+
 ## [1.6.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.0...v1.6.1) (2026-09-09)
 
 
