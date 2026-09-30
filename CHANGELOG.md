@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.3...v1.7.0) (2026-09-30)
+
+
+### Features
+
+* **heatpump:** let the household report the room temperature ([b26c6bc](https://github.com/nubisco/openbridge-tuya-local-platform/commit/b26c6bc786c6bd09036f46d7fbab97d55fd9d4a4))
+
 ## [1.6.3](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.2...v1.6.3) (2026-09-30)
 
 
