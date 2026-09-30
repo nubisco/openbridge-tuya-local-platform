@@ -1,4 +1,5 @@
 import BaseAccessory from './Base.accessory'
+import { mapRoomToWater, mapWaterToRoom, curveCeiling } from '../temperatureCurve'
 import type { DPSState, DPSValue, OpenbridgeCallback, RoomToWaterMapEntry } from '../types'
 
 /**
@@ -101,6 +102,18 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     this.log.debug(`[MappedHeatPump] Water target range: ${this.waterTargetMin}-${this.waterTargetMax}°C`)
     this.log.debug(`[MappedHeatPump] Mapping table: ${JSON.stringify(this.roomToWaterMap)}`)
     this.log.debug(`[MappedHeatPump] Initial virtual room target: ${this.virtualRoomTarget}°C`)
+
+    // A curve whose top is far below what the unit accepts cannot ask for the
+    // heat a cold day needs, and nothing reveals that until somebody is cold.
+    // Heat loss rises with the indoor-to-outdoor gap, so a curve calibrated in
+    // mild weather is routinely short by the time the outside air is near zero.
+    const ceiling = curveCeiling(this.roomToWaterMap)
+    if (ceiling !== null && ceiling < this.waterTargetMax) {
+      this.log.info(
+        `[MappedHeatPump] Curve tops out at ${ceiling}°C water (unit accepts up to ${this.waterTargetMax}°C). ` +
+          `If the house is cold on the coldest days, the curve is the limit, not the pump.`,
+      )
+    }
 
     const characteristicActive = service
       .getCharacteristic(Characteristic.Active)
@@ -207,6 +220,27 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
         }
       }
 
+      // The water target changed underneath us: the vendor app, the unit's own
+      // panel or a schedule. Reflect it rather than carrying on displaying the
+      // room target we last wrote.
+      if (changes.hasOwnProperty(this.dpWaterTarget)) {
+        const rawWater = Number(changes[this.dpWaterTarget])
+        if (Number.isFinite(rawWater)) {
+          const water = rawWater / (this.waterTargetDivisor || 1)
+          const room = this._roundToStep(this._mapWaterToRoom(water))
+          if (room !== this.virtualRoomTarget) {
+            this.log.info(
+              `[MappedHeatPump] Water target changed externally to ${water}°C, which maps back to room ${room}°C`,
+            )
+            this.virtualRoomTarget = room
+            this.accessory.context.virtualRoomTarget = room
+            if (this.characteristicHeatingThresholdTemperature) {
+              this.characteristicHeatingThresholdTemperature.updateValue(room)
+            }
+          }
+        }
+      }
+
       if (changes.hasOwnProperty(this.dpReturnTemperature)) {
         const convertedTemp = this._getDividedState(changes[this.dpReturnTemperature], this.returnTemperatureDivisor)
         if (characteristicCurrentTemperature.value !== convertedTemp) {
@@ -274,6 +308,9 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
         const raw = Math.round(clampedWater * this.waterTargetDivisor)
         this.setState(this.dpWaterTarget, raw, () => {})
         this.virtualRoomTarget = clamped
+        // Persisted like the HomeKit path does. Without this, a target set from
+        // the OpenBridge UI was forgotten on the next restart.
+        this.accessory.context.virtualRoomTarget = clamped
       })
     }
   }
@@ -362,40 +399,35 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
    * Map room temperature to water temperature using the mapping table
    * with linear interpolation between points
    */
+  /**
+   * Water setpoint back to the room target it represents.
+   *
+   * The inverse of _mapRoomToWater, needed because the water target is not
+   * ours alone: it can be changed in the vendor app, on the unit's own panel,
+   * or by a schedule. Without reading it back, HomeKit kept showing whatever
+   * room target it last wrote while the pump ran at something else entirely,
+   * and the two only ever drifted further apart.
+   *
+   * A flat section of the curve has no single answer (a map ending 22 to 29
+   * then 24 to 30 means water 30 could be either). The highest room
+   * temperature that produces the value is returned, because that is the one
+   * a person asking for that much heat meant.
+   */
+  /** Snap to the step HomeKit advertises, so the dial lands on a real position. */
+  _roundToStep(value: number): number {
+    const step = Number(this.device.context.minTemperatureSteps) || 0.5
+    return Math.round(value / step) * step
+  }
+
+  _mapWaterToRoom(waterTemp: number): number {
+    return mapWaterToRoom(this.roomToWaterMap, waterTemp)
+  }
+
   _mapRoomToWater(roomTemp: number): number {
-    const map = this.roomToWaterMap
-
-    if (map.length === 0) {
+    if (this.roomToWaterMap.length === 0) {
       this.log.warn('[MappedHeatPump] No mapping table defined, using 1:1 mapping')
-      return roomTemp
     }
-
-    if (roomTemp <= map[0].room) {
-      return map[0].water
-    }
-
-    if (roomTemp >= map[map.length - 1].room) {
-      return map[map.length - 1].water
-    }
-
-    for (let i = 0; i < map.length - 1; i++) {
-      const lower = map[i]
-      const upper = map[i + 1]
-
-      if (roomTemp >= lower.room && roomTemp <= upper.room) {
-        const ratio = (roomTemp - lower.room) / (upper.room - lower.room)
-        const waterTemp = lower.water + ratio * (upper.water - lower.water)
-
-        this.log.debug(
-          `[MappedHeatPump] Interpolating: room ${roomTemp}°C between [${lower.room}→${lower.water}] and [${upper.room}→${upper.water}] = water ${waterTemp.toFixed(1)}°C`,
-        )
-
-        return waterTemp
-      }
-    }
-
-    // Fallback (should not reach here)
-    return roomTemp
+    return mapRoomToWater(this.roomToWaterMap, roomTemp)
   }
 }
 
