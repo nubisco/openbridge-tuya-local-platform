@@ -58,6 +58,7 @@ interface PluginContext {
   reportTelemetry(deviceId: string, data: Record<string, unknown>): void
   registerDevice(device: { id: string; name: string; widgetType: string; manufacturer?: string; model?: string }): void
   registerControl(deviceId: string, controlId: string, handler: (value: unknown) => void | Promise<void>): void
+  registerObservationContext?(deviceId: string, provider: () => Record<string, unknown>): void
 }
 
 function definePlugin<T extends { manifest: { name: string; version: string } }>(plugin: T): T {
@@ -287,6 +288,7 @@ class TuyaLocalPlatform {
   config: TuyaPlatformConfig
   api: any
   reportTelemetry?: (deviceId: string, data: Record<string, unknown>) => void
+  registerObservationContext?: (deviceId: string, provider: () => Record<string, unknown>) => void
   registerControl?: (deviceId: string, controlId: string, handler: (value: unknown) => void | Promise<void>) => void
   private _hapAccessories: Map<string, any> = new Map()
 
@@ -561,6 +563,11 @@ const nativePlugin = definePlugin({
     const platform = new TuyaLocalPlatform(platformLog, platformConfig, shim)
     platform.reportTelemetry = ctx.reportTelemetry.bind(ctx)
     platform.registerControl = ctx.registerControl.bind(ctx)
+    // Optional on the host: an older OpenBridge has no observation support, and
+    // the plugin must still load against it.
+    if (ctx.registerObservationContext) {
+      platform.registerObservationContext = ctx.registerObservationContext.bind(ctx)
+    }
 
     // Register devices so they appear in the OpenBridge devices view
     const deviceList = (ctx.config.devices as TuyaDeviceConfig[]) ?? []
@@ -575,6 +582,20 @@ const nativePlugin = definePlugin({
 
       // Expose interpolation calibration for MappedHeatPumpHeater devices
       if (device.type.toLowerCase() === 'mappedheatpumpheater') {
+        // This device has no room sensor. The temperature it reports is its own
+        // return water, so nothing in the loop measures the house, and whether
+        // the curve is right is knowable only to whoever lives there.
+        descriptor.observations = {
+          label: 'Room temperature',
+          unit: '°C',
+          min: 5,
+          max: 35,
+          help:
+            'Report what the house actually feels like, with the heating settled. ' +
+            'Each report is stored with the outside temperature and water setpoint at the time, ' +
+            'which is what makes it usable for checking the curve later.',
+        }
+
         descriptor.interpolation = {
           inputLabel: 'Room Temperature (C)',
           outputLabel: 'Water Temperature (C)',

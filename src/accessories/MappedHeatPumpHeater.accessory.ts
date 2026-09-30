@@ -16,6 +16,8 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
   }
 
   virtualRoomTarget!: number
+  /** When the water setpoint last changed, for judging whether a report is settled. */
+  waterTargetChangedAt: number | null = null
   dpActive!: string
   dpReturnTemperature!: string
   dpWaterTarget!: string
@@ -234,6 +236,7 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
             )
             this.virtualRoomTarget = room
             this.accessory.context.virtualRoomTarget = room
+            this.waterTargetChangedAt = Date.now()
             if (this.characteristicHeatingThresholdTemperature) {
               this.characteristicHeatingThresholdTemperature.updateValue(room)
             }
@@ -300,6 +303,34 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
         const boolVal = Boolean(value)
         this.setState(this.dpActive, boolVal, () => {})
       })
+      // What was true when somebody filed a report. Without it a report is a
+      // bare number: a house at 24 on a sunny afternoon with cold radiators and
+      // a house at 24 the heating worked to reach are opposite evidence.
+      this.platform.registerObservationContext?.(deviceId, () => {
+        const state = this.device.state || {}
+        const water = Number(state[this.dpWaterTarget])
+        return {
+          // Both are optional dps: a unit that does not report them is valid,
+          // and null says "not measured" rather than implying zero degrees.
+          outsideTemperature: this.dpOutsideTemperature
+            ? this._getDividedState(state[this.dpOutsideTemperature], this.outsideTemperatureDivisor)
+            : null,
+          flowTemperature: this.dpFlowTemperature
+            ? this._getDividedState(state[this.dpFlowTemperature], this.flowTemperatureDivisor)
+            : null,
+          returnTemperature: this._getDividedState(state[this.dpReturnTemperature], this.returnTemperatureDivisor),
+          waterSetpoint: Number.isFinite(water) ? water / (this.waterTargetDivisor || 1) : null,
+          roomTarget: this.virtualRoomTarget,
+          active: !!state[this.dpActive],
+          // How long the setpoint has been still. A house takes hours to
+          // respond, so a report filed minutes after a change describes the
+          // previous setpoint, and a fit should be able to discard it.
+          minutesSinceSetpointChange: this.waterTargetChangedAt
+            ? Math.round((Date.now() - this.waterTargetChangedAt) / 60000)
+            : null,
+        }
+      })
+
       this.platform.registerControl(deviceId, 'targetTemperature', (value: unknown) => {
         const roomTarget = Number(value)
         const clamped = Math.max(this.roomTargetMin, Math.min(this.roomTargetMax, roomTarget))
@@ -386,6 +417,7 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
 
       this.virtualRoomTarget = clampedRoom
       this.accessory.context.virtualRoomTarget = clampedRoom
+      this.waterTargetChangedAt = Date.now()
 
       if (this.characteristicHeatingThresholdTemperature) {
         this.characteristicHeatingThresholdTemperature.updateValue(clampedRoom)
