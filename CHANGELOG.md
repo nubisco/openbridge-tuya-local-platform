@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.2...v1.6.3) (2026-09-30)
+
+
+### Bug Fixes
+
+* **heatpump:** read the water target back, so HomeKit stops drifting from the unit ([97f007c](https://github.com/nubisco/openbridge-tuya-local-platform/commit/97f007c55c90cf3b4a306a19fc957ac8e513200b))
+
 ## [1.6.2](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.1...v1.6.2) (2026-09-29)
 
 
