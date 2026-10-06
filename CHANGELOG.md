@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.7.0...v1.7.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* **heatpump:** adopt the unit's setpoint at startup, not only on change ([b91b6f6](https://github.com/nubisco/openbridge-tuya-local-platform/commit/b91b6f6125750f45887a14fcbc3593e6e20442bf))
+
 # [1.7.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.6.3...v1.7.0) (2026-09-30)
 
 
