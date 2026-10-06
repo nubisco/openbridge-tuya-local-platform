@@ -148,6 +148,28 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
       `[MappedHeatPump] Initial return temperature from DP ${this.dpReturnTemperature}: raw=${dps[this.dpReturnTemperature]}, converted=${this._getDividedState(dps[this.dpReturnTemperature], this.returnTemperatureDivisor)}°C`,
     )
 
+    // Adopt the setpoint the unit is already running before publishing a value.
+    //
+    // The change handler reads dpWaterTarget back, but a change handler only
+    // fires on a change: a setpoint altered while this was not running, or
+    // simply unchanged since, never produces one. So after a restart HomeKit
+    // showed the room target it last wrote while the unit sat somewhere else
+    // entirely. Observed live: the displayed target was 20 while the water
+    // setpoint was 45.
+    const initialWaterRaw = Number(dps?.[this.dpWaterTarget])
+    if (Number.isFinite(initialWaterRaw)) {
+      const initialWater = initialWaterRaw / (this.waterTargetDivisor || 1)
+      const initialRoom = this._roundToStep(this._mapWaterToRoom(initialWater))
+      if (initialRoom !== this.virtualRoomTarget) {
+        this.log.info(
+          `[MappedHeatPump] Unit is at ${initialWater}°C water, which maps back to room ${initialRoom}°C ` +
+            `(was showing ${this.virtualRoomTarget}°C)`,
+        )
+        this.virtualRoomTarget = initialRoom
+        this.accessory.context.virtualRoomTarget = initialRoom
+      }
+    }
+
     const characteristicHeatingThresholdTemperature = service
       .getCharacteristic(Characteristic.HeatingThresholdTemperature)
       .setProps({
