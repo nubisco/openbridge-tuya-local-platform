@@ -1,3 +1,19 @@
+# [2.0.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.7.1...v2.0.0) (2026-10-23)
+
+
+* feat!: require Node.js 22.23.4 or newer ([b23e981](https://github.com/nubisco/openbridge-tuya-local-platform/commit/b23e98150e970b0206c8017f6cd838d80db189c3))
+
+
+### BREAKING CHANGES
+
+* Node.js 20 is no longer supported. Node 20 reached end of
+life in April 2026 and gets no security fixes, so it stays exposed to the
+October 2026 Node.js security release (the Brotli remote code execution
+CVE-2026-111497 and the TLS hostname verification bypasses). Node 22
+releases before 22.23.4 are affected by the same release. Run OpenBridge on
+Node.js 22.23.4 or newer, or any Node 24 release, before updating this
+plugin.
+
 ## [1.7.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.7.0...v1.7.1) (2026-10-06)
 
 
