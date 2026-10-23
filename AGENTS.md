@@ -21,7 +21,7 @@ The plugin supports two loading modes in OpenBridge:
 - **Language**: TypeScript (strict mode, `strictNullChecks` and `strictFunctionTypes` off)
 - **Module system**: CommonJS (output to `dist/`)
 - **Target**: ES2022
-- **Runtime**: Node.js >= 20, OpenBridge >= 0.1.0
+- **Runtime**: Node.js >= 22.23.4, OpenBridge >= 0.1.0
 - **Config validation**: Zod (validates device config at plugin startup)
 
 ## Directory Structure
@@ -212,7 +212,7 @@ When making changes, ensure these files stay consistent:
 - **Language**: TypeScript (strict mode, `strictNullChecks` and `strictFunctionTypes` off)
 - **Module system**: CommonJS (output to `dist/`)
 - **Target**: ES2022
-- **Runtime**: Node.js >= 18, Openbridge >= 1.6.0
+- **Runtime**: Node.js >= 22.23.4, OpenBridge >= 0.1.0
 - **Documentation**: VitePress (source in `docs/`, deployed to GitHub Pages)
 
 ## Directory Structure

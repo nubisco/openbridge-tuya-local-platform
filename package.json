@@ -22,7 +22,7 @@
     "displayName": "Tuya Local Platform"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.23.4"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

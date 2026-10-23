@@ -57,6 +57,6 @@ See [Supported Device Types](./device-types) for detailed configuration paramete
 
 ## Requirements
 
-- **Node.js** >= 20.0.0
+- **Node.js** >= 22.23.4
 - **OpenBridge** >= 0.5.0
 - Tuya device **Local Key** (see [Getting Local Keys](./get-local-keys))
