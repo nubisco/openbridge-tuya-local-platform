@@ -1,4 +1,7 @@
-# Installation
+---
+layout: nubisco
+title: 'Installation'
+---
 
 ## Option 1: OpenBridge UI (Recommended)
 

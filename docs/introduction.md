@@ -1,6 +1,8 @@
-# Introduction
-
-Control Tuya-based smart devices locally over LAN through OpenBridge and Apple HomeKit.
+---
+layout: nubisco
+title: 'Introduction'
+intro: 'Control Tuya-based smart devices locally over LAN through OpenBridge and Apple HomeKit.'
+---
 
 `@nubisco/openbridge-tuya-local-platform` communicates directly with Tuya devices on your local network using their Device ID and Local Key -- no cloud dependency required. It runs as a native OpenBridge plugin with full integration into the OpenBridge devices view, telemetry, and controls.
 

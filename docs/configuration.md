@@ -1,6 +1,8 @@
-# Configuration
-
-Add the plugin to the `platforms` array in your OpenBridge `config.json`.
+---
+layout: nubisco
+title: 'Configuration'
+intro: 'Add the plugin to the `platforms` array in your OpenBridge `config.json`.'
+---
 
 ## Minimal Example
 
