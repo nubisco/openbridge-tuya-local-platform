@@ -307,7 +307,7 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
         }
       }
 
-      this.log.info('MappedHeatPump changed: ' + JSON.stringify(state))
+      this.log.debug('MappedHeatPump changed: ' + JSON.stringify(state))
 
       // Report telemetry for the OpenBridge devices view
       if (this.platform?.reportTelemetry) {

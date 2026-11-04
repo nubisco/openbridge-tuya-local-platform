@@ -155,7 +155,7 @@ class SimpleHeaterAccessory extends BaseAccessory {
         }
       }
 
-      this.log.info('SimpleHeater changed: ' + JSON.stringify(state))
+      this.log.debug('SimpleHeater changed: ' + JSON.stringify(state))
 
       // Report telemetry for the OpenBridge devices view
       if (this.platform?.reportTelemetry) {
