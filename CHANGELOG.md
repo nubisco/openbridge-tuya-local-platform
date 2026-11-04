@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v2.0.0...v2.0.1) (2026-11-04)
+
+
+### Bug Fixes
+
+* **heater:** log the full state dump at debug, not info ([14acfcf](https://github.com/nubisco/openbridge-tuya-local-platform/commit/14acfcf34fcc40c5049a775549005213deb821c1))
+
 # [2.0.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v1.7.1...v2.0.0) (2026-10-23)
 
 
