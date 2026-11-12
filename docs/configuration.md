@@ -35,7 +35,7 @@ intro: 'Add the plugin to the `platforms` array in your OpenBridge `config.json`
 | `ip`           | No       | Static IP address (only if auto-discovery fails)                      |
 | `manufacturer` | No       | Manufacturer name shown in HomeKit                                    |
 | `model`        | No       | Model name shown in HomeKit                                           |
-| `version`      | No       | Tuya protocol version (`3.1`, `3.3`, or `3.4`)                        |
+| `version`      | No       | Tuya protocol version (`3.1`, `3.3`, `3.4`, or `3.5`)                 |
 
 ::: tip
 The `type` value is case-insensitive. `"SimpleLight"`, `"simplelight"`, and `"SIMPLELIGHT"` all work.

@@ -15,7 +15,7 @@ intro: 'Control Tuya-based smart devices locally over LAN through OpenBridge and
 - **Adaptive Lighting** -- supported on compatible light accessories
 - **Energy monitoring** -- power, voltage, current, and historical consumption tracking on supported devices
 - **Safety controls** -- confirmation dialogs for safety-critical devices (circuit breakers)
-- **Multi-protocol** -- supports Tuya protocol versions 3.1, 3.3, and 3.4
+- **Multi-protocol** -- supports Tuya protocol versions 3.1, 3.3, 3.4, and 3.5 (experimental)
 
 ## What's Different from Homebridge Tuya Local Platform?
 

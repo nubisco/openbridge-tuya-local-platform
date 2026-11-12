@@ -4,7 +4,7 @@ This file helps AI coding agents understand the structure, conventions, and work
 
 ## Project Overview
 
-**openbridge-tuya-local-platform** is an OpenBridge plugin that controls Tuya-based smart devices over LAN without cloud dependency. It communicates directly with devices using their Device ID and Local Key via the Tuya protocol (versions 3.1, 3.3, 3.4).
+**openbridge-tuya-local-platform** is an OpenBridge plugin that controls Tuya-based smart devices over LAN without cloud dependency. It communicates directly with devices using their Device ID and Local Key via the Tuya protocol (versions 3.1, 3.3, 3.4, 3.5).
 
 - **Plugin name**: `@nubisco/openbridge-tuya-local-platform`
 - **Platform alias**: `TuyaLocalPlatform`
