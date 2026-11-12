@@ -1,3 +1,17 @@
+# [2.1.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v2.0.1...v2.1.0) (2026-11-12)
+
+
+### Bug Fixes
+
+* **protocol:** stop a bad v3.4 frame from crashing the bridge ([a95b04e](https://github.com/nubisco/openbridge-tuya-local-platform/commit/a95b04e025125e9a0ff7428b9352a2f28c78a0ad))
+* use the detected color format when converting colors ([a0a868e](https://github.com/nubisco/openbridge-tuya-local-platform/commit/a0a868e2b2585345d2899359a15d347d37ba0eda)), closes [homebridge-tuya-local-platform#51](https://github.com/homebridge-tuya-local-platform/issues/51)
+
+
+### Features
+
+* **protocol:** add Tuya v3.5 LAN support ([a4445a6](https://github.com/nubisco/openbridge-tuya-local-platform/commit/a4445a6a8120b5433e9b8c9c6656294e98184365)), closes [homebridge-tuya-local-platform#17](https://github.com/homebridge-tuya-local-platform/issues/17)
+* **protocol:** report a device outage once instead of once per retry ([825d6b3](https://github.com/nubisco/openbridge-tuya-local-platform/commit/825d6b323332ee66c135ae5c5f38b13714add1cd))
+
 ## [2.0.1](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v2.0.0...v2.0.1) (2026-11-04)
 
 
