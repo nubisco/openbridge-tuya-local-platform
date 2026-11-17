@@ -710,6 +710,8 @@ The breaker switch (DP 16) is **never exposed to HomeKit** for safety reasons. T
 
 Heat pump heaters with virtual room-to-water temperature mapping. Displays tank/return temperature as current temperature and maps a virtual room target to actual water setpoint using an interpolation table.
 
+In OpenBridge, every reading the config names is reported to the bridge (`supplyTemperature` from the flow DP, `outsideTemperature`, and `hotWaterTemperature` from the hot water DP), whether or not it is exposed to HomeKit. The `expose*Sensor` options only decide which readings also appear in Apple Home as their own temperature sensors. The house plan colours the heating pipes by the flow temperature and the garden by the outside temperature.
+
 ```json5
 {
   name: 'Heat Pump',
@@ -727,12 +729,14 @@ Heat pump heaters with virtual room-to-water temperature mapping. Displays tank/
   dpWaterTarget: '117',
   dpOutsideTemperature: '118',
   dpFlowTemperature: '119',
+  dpHotWaterTemperature: '120',
 
   /* Temperature divisors (device reports temp * divisor) */
   returnTemperatureDivisor: 10,
   waterTargetDivisor: 1,
   outsideTemperatureDivisor: 10,
   flowTemperatureDivisor: 10,
+  hotWaterTemperatureDivisor: 10,
 
   /* Virtual room temperature range (°C) */
   roomTargetMin: 18,
@@ -757,6 +761,8 @@ Heat pump heaters with virtual room-to-water temperature mapping. Displays tank/
   outsideSensorName: 'Heat Pump Outside',
   exposeFlowSensor: true,
   flowSensorName: 'Heat Pump Flow',
+  exposeHotWaterSensor: false,
+  hotWaterSensorName: 'Heat Pump Hot water',
   exposeReturnSensor: true,
   returnSensorName: 'Heat Pump Return',
 }

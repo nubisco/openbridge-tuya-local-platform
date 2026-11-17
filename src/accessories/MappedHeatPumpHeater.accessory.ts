@@ -1,5 +1,6 @@
 import BaseAccessory from './Base.accessory'
 import { mapRoomToWater, mapWaterToRoom, curveCeiling } from '../temperatureCurve'
+import { heatPumpTelemetry } from '../heatPumpTelemetry'
 import type { DPSState, DPSValue, OpenbridgeCallback, RoomToWaterMapEntry } from '../types'
 
 /**
@@ -9,6 +10,10 @@ import type { DPSState, DPSValue, OpenbridgeCallback, RoomToWaterMapEntry } from
  * - Current temperature = tank/return temperature from device
  * - Target temperature = desired ROOM temperature (virtual, not sent to device)
  * - Actual device setpoint = mapped water temperature computed from room target
+ *
+ * OpenBridge gets every reading the config names (flow, outside, hot water
+ * tank), whatever HomeKit is shown. Each `expose*Sensor` option only decides
+ * whether that reading also becomes a temperature sensor in Apple Home.
  */
 class MappedHeatPumpHeaterAccessory extends BaseAccessory {
   static getCategory(Categories: any): number {
@@ -23,6 +28,8 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
   dpWaterTarget!: string
   dpOutsideTemperature!: string | false
   dpFlowTemperature!: string | false
+  dpHotWaterTemperature!: string | false
+  hotWaterTemperatureDivisor!: number
   returnTemperatureDivisor!: number
   waterTargetDivisor!: number
   outsideTemperatureDivisor!: number
@@ -57,6 +64,12 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
       this.log.info(`[MappedHeatPump] Adding flow temperature sensor: ${flowName}`)
     }
 
+    if (this.device.context.exposeHotWaterSensor && this.device.context.dpHotWaterTemperature) {
+      const hotWaterName = this._hotWaterSensorName()
+      this.accessory.addService(Service.TemperatureSensor, hotWaterName)
+      this.log.info(`[MappedHeatPump] Adding hot water temperature sensor: ${hotWaterName}`)
+    }
+
     if (this.device.context.exposeReturnSensor && this.device.context.dpReturnTemperature) {
       const returnName = this.device.context.returnSensorName || this.device.context.name + ' Return'
       this.accessory.addService(Service.TemperatureSensor, returnName)
@@ -76,11 +89,13 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     this.dpWaterTarget = this._getCustomDP(this.device.context.dpWaterTarget) || '117'
     this.dpOutsideTemperature = this._getCustomDP(this.device.context.dpOutsideTemperature)
     this.dpFlowTemperature = this._getCustomDP(this.device.context.dpFlowTemperature)
+    this.dpHotWaterTemperature = this._getCustomDP(this.device.context.dpHotWaterTemperature)
 
     this.returnTemperatureDivisor = parseInt(this.device.context.returnTemperatureDivisor) || 10
     this.waterTargetDivisor = parseInt(this.device.context.waterTargetDivisor) || 1
     this.outsideTemperatureDivisor = parseInt(this.device.context.outsideTemperatureDivisor) || 10
     this.flowTemperatureDivisor = parseInt(this.device.context.flowTemperatureDivisor) || 10
+    this.hotWaterTemperatureDivisor = parseInt(this.device.context.hotWaterTemperatureDivisor) || 10
 
     this.roomTargetMin = parseFloat(this.device.context.roomTargetMin) || 18
     this.roomTargetMax = parseFloat(this.device.context.roomTargetMax) || 24
@@ -236,6 +251,26 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
       }
     }
 
+    // Configure optional hot water tank sensor. Found by its exact name, so a
+    // custom name that does not contain "Hot water" still matches.
+    let characteristicHotWater: any
+    if (this.dpHotWaterTemperature && this.device.context.exposeHotWaterSensor) {
+      const hotWaterName = this._hotWaterSensorName()
+      const hotWaterService = this.accessory.services.find(
+        (s: any) => s.UUID === Service.TemperatureSensor.UUID && s.displayName === hotWaterName,
+      )
+      if (hotWaterService) {
+        characteristicHotWater = hotWaterService
+          .getCharacteristic(Characteristic.CurrentTemperature)
+          .updateValue(this._getDividedState(dps[this.dpHotWaterTemperature], this.hotWaterTemperatureDivisor))
+          .on('get', this.getDividedState.bind(this, this.dpHotWaterTemperature, this.hotWaterTemperatureDivisor))
+      }
+    }
+
+    // The readings as they are now, so OpenBridge has them from the start and
+    // not only after the first change.
+    this._reportTelemetry(dps)
+
     this.device.on('change', (changes: DPSState, state: DPSState) => {
       if (changes.hasOwnProperty(this.dpActive)) {
         const newActive = this._getActive(changes[this.dpActive])
@@ -307,15 +342,17 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
         }
       }
 
+      if (this.dpHotWaterTemperature && changes.hasOwnProperty(this.dpHotWaterTemperature) && characteristicHotWater) {
+        const convertedHotWater = this._getDividedState(
+          changes[this.dpHotWaterTemperature],
+          this.hotWaterTemperatureDivisor,
+        )
+        if (characteristicHotWater.value !== convertedHotWater) characteristicHotWater.updateValue(convertedHotWater)
+      }
+
       this.log.debug('MappedHeatPump changed: ' + JSON.stringify(state))
 
-      // Report telemetry for the OpenBridge devices view
-      if (this.platform?.reportTelemetry) {
-        const active = !!state[this.dpActive]
-        const currentTemperature = this._getDividedState(state[this.dpReturnTemperature], this.returnTemperatureDivisor)
-        const targetTemperature = this.virtualRoomTarget
-        this.platform.reportTelemetry(this.device.context.id, { active, currentTemperature, targetTemperature })
-      }
+      this._reportTelemetry(state)
     })
 
     // Register OpenBridge controls
@@ -418,6 +455,33 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
 
   setTargetHeaterCoolerState(value: DPSValue, callback: OpenbridgeCallback): void {
     this.setState(this.dpActive, true, callback)
+  }
+
+  _hotWaterSensorName(): string {
+    return this.device.context.hotWaterSensorName || this.device.context.name + ' Hot water'
+  }
+
+  /** Every named reading to OpenBridge, whatever HomeKit is shown. */
+  _reportTelemetry(state: DPSState): void {
+    if (!this.platform?.reportTelemetry) return
+    this.platform.reportTelemetry(
+      this.device.context.id,
+      heatPumpTelemetry(
+        state,
+        {
+          dpActive: this.dpActive,
+          dpCurrent: this.dpReturnTemperature,
+          currentDivisor: this.returnTemperatureDivisor,
+          dpFlow: this.dpFlowTemperature,
+          flowDivisor: this.flowTemperatureDivisor,
+          dpOutside: this.dpOutsideTemperature,
+          outsideDivisor: this.outsideTemperatureDivisor,
+          dpHotWater: this.dpHotWaterTemperature,
+          hotWaterDivisor: this.hotWaterTemperatureDivisor,
+        },
+        this.virtualRoomTarget,
+      ),
+    )
   }
 
   getVirtualRoomTarget(callback: OpenbridgeCallback): void {

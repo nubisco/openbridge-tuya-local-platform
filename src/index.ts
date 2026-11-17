@@ -468,7 +468,7 @@ const nativePlugin = definePlugin({
     name: PLUGIN_NAME,
     version: PLUGIN_VERSION,
     description: 'Control Tuya devices locally over LAN without cloud dependency',
-    author: 'José Silva',
+    author: 'Nubisco',
   },
 
   async setup(ctx: PluginContext) {
