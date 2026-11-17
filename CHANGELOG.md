@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v2.2.0...v2.3.0) (2026-11-17)
+
+
+### Features
+
+* **heat-pump:** the water coming back, as its own reading ([#8](https://github.com/nubisco/openbridge-tuya-local-platform/issues/8)) ([bd3d25a](https://github.com/nubisco/openbridge-tuya-local-platform/commit/bd3d25ac4531cbf97db450a75e7fb39ef7fe463a))
+
 # [2.2.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v2.1.0...v2.2.0) (2026-11-17)
 
 
