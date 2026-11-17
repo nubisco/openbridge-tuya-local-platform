@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v2.1.0...v2.2.0) (2026-11-17)
+
+
+### Features
+
+* **heat-pump:** report flow, outside and hot water readings to OpenBridge ([#7](https://github.com/nubisco/openbridge-tuya-local-platform/issues/7)) ([bd11d85](https://github.com/nubisco/openbridge-tuya-local-platform/commit/bd11d85ef087baa5f3c7745fd086ecb8beff4437))
+
 # [2.1.0](https://github.com/nubisco/openbridge-tuya-local-platform/compare/v2.0.1...v2.1.0) (2026-11-12)
 
 
