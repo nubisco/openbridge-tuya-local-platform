@@ -710,7 +710,7 @@ The breaker switch (DP 16) is **never exposed to HomeKit** for safety reasons. T
 
 Heat pump heaters with virtual room-to-water temperature mapping. Displays tank/return temperature as current temperature and maps a virtual room target to actual water setpoint using an interpolation table.
 
-In OpenBridge, every reading the config names is reported to the bridge (`supplyTemperature` from the flow DP, `outsideTemperature`, and `hotWaterTemperature` from the hot water DP), whether or not it is exposed to HomeKit. The `expose*Sensor` options only decide which readings also appear in Apple Home as their own temperature sensors. The house plan colours the heating pipes by the flow temperature and the garden by the outside temperature.
+In OpenBridge, every reading the config names is reported to the bridge (`supplyTemperature` from the flow DP, `returnTemperature` from the water back DP, `outsideTemperature`, and `hotWaterTemperature` from the hot water DP), whether or not it is exposed to HomeKit. The `expose*Sensor` options only decide which readings also appear in Apple Home as their own temperature sensors. The house plan colours the heating pipes by the flow temperature, draws a second return pipe when the water back is known, and colours the garden by the outside temperature. Note that `dpReturnTemperature` is the reading the HomeKit tile shows as its current temperature, which on some units is the hot water tank: the water coming back from the house is `dpWaterBackTemperature`.
 
 ```json5
 {
@@ -730,6 +730,7 @@ In OpenBridge, every reading the config names is reported to the bridge (`supply
   dpOutsideTemperature: '118',
   dpFlowTemperature: '119',
   dpHotWaterTemperature: '120',
+  dpWaterBackTemperature: '121',
 
   /* Temperature divisors (device reports temp * divisor) */
   returnTemperatureDivisor: 10,
@@ -737,6 +738,7 @@ In OpenBridge, every reading the config names is reported to the bridge (`supply
   outsideTemperatureDivisor: 10,
   flowTemperatureDivisor: 10,
   hotWaterTemperatureDivisor: 10,
+  waterBackTemperatureDivisor: 10,
 
   /* Virtual room temperature range (°C) */
   roomTargetMin: 18,
@@ -762,6 +764,7 @@ In OpenBridge, every reading the config names is reported to the bridge (`supply
   exposeFlowSensor: true,
   flowSensorName: 'Heat Pump Flow',
   exposeHotWaterSensor: false,
+  exposeWaterBackSensor: false,
   hotWaterSensorName: 'Heat Pump Hot water',
   exposeReturnSensor: true,
   returnSensorName: 'Heat Pump Return',

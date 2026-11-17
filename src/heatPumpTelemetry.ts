@@ -12,6 +12,9 @@ export interface HeatPumpReadingDPs {
   outsideDivisor?: number
   dpHotWater?: string | false
   hotWaterDivisor?: number
+  /** The water coming back from the house to the pump. */
+  dpWaterBack?: string | false
+  waterBackDivisor?: number
 }
 
 const reading = (state: DPSState, dp: string | false | undefined, divisor = 10): number | undefined => {
@@ -27,8 +30,9 @@ const reading = (state: DPSState, dp: string | false | undefined, divisor = 10):
  * it is exposed to HomeKit: the `expose*Sensor` options decide only what Apple
  * Home sees. The names are the ones OpenBridge's house plan reads:
  * `supplyTemperature` is the water going out to the house (it colours the
- * pipes), `outsideTemperature` colours the garden, and `hotWaterTemperature` is
- * the domestic hot water tank. A reading the unit has not sent is left out
+ * pipes), `returnTemperature` is the water coming back to the pump (with it
+ * the plan draws the flow and the return as two pipes), `outsideTemperature`
+ * colours the garden, and `hotWaterTemperature` is the domestic hot water tank. A reading the unit has not sent is left out
  * rather than reported as 0.
  */
 export function heatPumpTelemetry(
@@ -44,6 +48,8 @@ export function heatPumpTelemetry(
   if (current !== undefined) out.currentTemperature = current
   const supply = reading(state, dps.dpFlow, dps.flowDivisor)
   if (supply !== undefined) out.supplyTemperature = supply
+  const back = reading(state, dps.dpWaterBack, dps.waterBackDivisor)
+  if (back !== undefined) out.returnTemperature = back
   const outside = reading(state, dps.dpOutside, dps.outsideDivisor)
   if (outside !== undefined) out.outsideTemperature = outside
   const hotWater = reading(state, dps.dpHotWater, dps.hotWaterDivisor)

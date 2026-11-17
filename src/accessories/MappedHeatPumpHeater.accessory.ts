@@ -29,6 +29,8 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
   dpOutsideTemperature!: string | false
   dpFlowTemperature!: string | false
   dpHotWaterTemperature!: string | false
+  dpWaterBackTemperature!: string | false
+  waterBackTemperatureDivisor!: number
   hotWaterTemperatureDivisor!: number
   returnTemperatureDivisor!: number
   waterTargetDivisor!: number
@@ -70,6 +72,12 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
       this.log.info(`[MappedHeatPump] Adding hot water temperature sensor: ${hotWaterName}`)
     }
 
+    if (this.device.context.exposeWaterBackSensor && this.device.context.dpWaterBackTemperature) {
+      const waterBackName = this._waterBackSensorName()
+      this.accessory.addService(Service.TemperatureSensor, waterBackName)
+      this.log.info(`[MappedHeatPump] Adding water back temperature sensor: ${waterBackName}`)
+    }
+
     if (this.device.context.exposeReturnSensor && this.device.context.dpReturnTemperature) {
       const returnName = this.device.context.returnSensorName || this.device.context.name + ' Return'
       this.accessory.addService(Service.TemperatureSensor, returnName)
@@ -90,12 +98,14 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     this.dpOutsideTemperature = this._getCustomDP(this.device.context.dpOutsideTemperature)
     this.dpFlowTemperature = this._getCustomDP(this.device.context.dpFlowTemperature)
     this.dpHotWaterTemperature = this._getCustomDP(this.device.context.dpHotWaterTemperature)
+    this.dpWaterBackTemperature = this._getCustomDP(this.device.context.dpWaterBackTemperature)
 
     this.returnTemperatureDivisor = parseInt(this.device.context.returnTemperatureDivisor) || 10
     this.waterTargetDivisor = parseInt(this.device.context.waterTargetDivisor) || 1
     this.outsideTemperatureDivisor = parseInt(this.device.context.outsideTemperatureDivisor) || 10
     this.flowTemperatureDivisor = parseInt(this.device.context.flowTemperatureDivisor) || 10
     this.hotWaterTemperatureDivisor = parseInt(this.device.context.hotWaterTemperatureDivisor) || 10
+    this.waterBackTemperatureDivisor = parseInt(this.device.context.waterBackTemperatureDivisor) || 10
 
     this.roomTargetMin = parseFloat(this.device.context.roomTargetMin) || 18
     this.roomTargetMax = parseFloat(this.device.context.roomTargetMax) || 24
@@ -267,6 +277,21 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
       }
     }
 
+    // Configure optional water back sensor, found by its exact name.
+    let characteristicWaterBack: any
+    if (this.dpWaterBackTemperature && this.device.context.exposeWaterBackSensor) {
+      const waterBackName = this._waterBackSensorName()
+      const waterBackService = this.accessory.services.find(
+        (s: any) => s.UUID === Service.TemperatureSensor.UUID && s.displayName === waterBackName,
+      )
+      if (waterBackService) {
+        characteristicWaterBack = waterBackService
+          .getCharacteristic(Characteristic.CurrentTemperature)
+          .updateValue(this._getDividedState(dps[this.dpWaterBackTemperature], this.waterBackTemperatureDivisor))
+          .on('get', this.getDividedState.bind(this, this.dpWaterBackTemperature, this.waterBackTemperatureDivisor))
+      }
+    }
+
     // The readings as they are now, so OpenBridge has them from the start and
     // not only after the first change.
     this._reportTelemetry(dps)
@@ -348,6 +373,18 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
           this.hotWaterTemperatureDivisor,
         )
         if (characteristicHotWater.value !== convertedHotWater) characteristicHotWater.updateValue(convertedHotWater)
+      }
+
+      if (
+        this.dpWaterBackTemperature &&
+        changes.hasOwnProperty(this.dpWaterBackTemperature) &&
+        characteristicWaterBack
+      ) {
+        const convertedBack = this._getDividedState(
+          changes[this.dpWaterBackTemperature],
+          this.waterBackTemperatureDivisor,
+        )
+        if (characteristicWaterBack.value !== convertedBack) characteristicWaterBack.updateValue(convertedBack)
       }
 
       this.log.debug('MappedHeatPump changed: ' + JSON.stringify(state))
@@ -457,6 +494,10 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
     this.setState(this.dpActive, true, callback)
   }
 
+  _waterBackSensorName(): string {
+    return this.device.context.waterBackSensorName || this.device.context.name + ' Water back'
+  }
+
   _hotWaterSensorName(): string {
     return this.device.context.hotWaterSensorName || this.device.context.name + ' Hot water'
   }
@@ -478,6 +519,8 @@ class MappedHeatPumpHeaterAccessory extends BaseAccessory {
           outsideDivisor: this.outsideTemperatureDivisor,
           dpHotWater: this.dpHotWaterTemperature,
           hotWaterDivisor: this.hotWaterTemperatureDivisor,
+          dpWaterBack: this.dpWaterBackTemperature,
+          waterBackDivisor: this.waterBackTemperatureDivisor,
         },
         this.virtualRoomTarget,
       ),
