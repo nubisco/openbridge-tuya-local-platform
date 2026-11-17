@@ -566,6 +566,24 @@
                 "functionBody": "return model.devices && model.devices[arrayIndices] && ['MappedHeatPumpHeater'].includes(model.devices[arrayIndices].type);"
               }
             },
+            "dpWaterBackTemperature": {
+              "type": "integer",
+              "placeholder": "23",
+              "title": "Water Back Temperature DP",
+              "description": "Optional data point for the water coming back from the house to the pump. With it, OpenBridge draws the flow and the return as two pipes. It reaches HomeKit only if Expose Water Back Sensor is on.",
+              "condition": {
+                "functionBody": "return model.devices && model.devices[arrayIndices] && ['MappedHeatPumpHeater'].includes(model.devices[arrayIndices].type);"
+              }
+            },
+            "waterBackTemperatureDivisor": {
+              "type": "integer",
+              "placeholder": "10",
+              "title": "Water Back Temperature Divisor",
+              "description": "Divisor for the water back temperature.",
+              "condition": {
+                "functionBody": "return model.devices && model.devices[arrayIndices] && ['MappedHeatPumpHeater'].includes(model.devices[arrayIndices].type);"
+              }
+            },
             "roomTargetMin": {
               "type": "number",
               "placeholder": "18",
@@ -679,6 +697,23 @@
               "placeholder": "Heating Hot water",
               "title": "Hot Water Sensor Name",
               "description": "Custom name for the hot water tank sensor.",
+              "condition": {
+                "functionBody": "return model.devices && model.devices[arrayIndices] && ['MappedHeatPumpHeater'].includes(model.devices[arrayIndices].type);"
+              }
+            },
+            "exposeWaterBackSensor": {
+              "type": "boolean",
+              "title": "Expose Water Back Sensor",
+              "description": "Create a separate HomeKit temperature sensor for the water coming back. Off by default: OpenBridge shows the reading either way.",
+              "condition": {
+                "functionBody": "return model.devices && model.devices[arrayIndices] && ['MappedHeatPumpHeater'].includes(model.devices[arrayIndices].type);"
+              }
+            },
+            "waterBackSensorName": {
+              "type": "string",
+              "placeholder": "Heating Water back",
+              "title": "Water Back Sensor Name",
+              "description": "Custom name for the water back sensor.",
               "condition": {
                 "functionBody": "return model.devices && model.devices[arrayIndices] && ['MappedHeatPumpHeater'].includes(model.devices[arrayIndices].type);"
               }

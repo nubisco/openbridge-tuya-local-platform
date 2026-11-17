@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { heatPumpTelemetry } from '../src/heatPumpTelemetry'
 
-/** The Ekalor R290 as configured on the bridge: 21 outside, 24 flow, 25 the tank. */
+/** The Ekalor R290 as configured on the bridge: 21 outside, 23 water back, 24 flow, 25 the tank. */
 const DPS = {
   dpActive: '1',
   dpCurrent: '25',
@@ -12,16 +12,19 @@ const DPS = {
   outsideDivisor: 10,
   dpHotWater: '25',
   hotWaterDivisor: 10,
+  dpWaterBack: '23',
+  waterBackDivisor: 10,
 }
 
 describe('heatPumpTelemetry', () => {
   it('reports every named reading, divided', () => {
-    const t = heatPumpTelemetry({ '1': true, '21': 163, '24': 400, '25': 247 }, DPS, 21)
+    const t = heatPumpTelemetry({ '1': true, '21': 163, '23': 350, '24': 400, '25': 247 }, DPS, 21)
     expect(t).toEqual({
       active: true,
       targetTemperature: 21,
       currentTemperature: 24.7,
       supplyTemperature: 40,
+      returnTemperature: 35,
       outsideTemperature: 16.3,
       hotWaterTemperature: 24.7,
     })
